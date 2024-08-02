@@ -4,11 +4,21 @@
 
 import Landing from "./Pages/Landing/Landing";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Teams from "./Pages/Teams/Teams";
+import Games from "./Pages/Games/Games";
 
 const AppRouter = createBrowserRouter([
   {
     path: "/",
     element: <Landing />,
+  },
+  {
+    path: "/games",
+    element: <Games />,
+  },
+  {
+    path: "/teams",
+    element: <Teams />,
   },
 ]);
 
