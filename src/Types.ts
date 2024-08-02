@@ -20,6 +20,7 @@ export interface Player {
   Name: string;
   Number: number;
   DateOfBirth?: string;
+  Image?: any; // TODO: Think about potentially adding Images for easier identification of players.
 }
 
 interface GameEvent {
