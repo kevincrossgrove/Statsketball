@@ -10,7 +10,7 @@ export default function AppBasicCard({ title, onClick, className }: Props) {
   return (
     <div
       className={twMerge(
-        "border rounded border-white text-white text-xl font-semibold p-4 my-2 hover:bg-slate-600 hover:border-green-400",
+        "border rounded border-white text-text text-xl font-semibold p-4 my-2 hover:border-green-400",
         onClick && "cursor-pointer",
         className
       )}

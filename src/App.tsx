@@ -6,6 +6,16 @@ import Landing from "./Pages/Landing/Landing";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Teams from "./Pages/Teams/Teams";
 import Games from "./Pages/Games/Games";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const AppRouter = createBrowserRouter([
   {
@@ -26,7 +36,10 @@ const AppRouter = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={AppRouter} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={AppRouter} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 }

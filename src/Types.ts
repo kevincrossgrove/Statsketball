@@ -1,31 +1,51 @@
-export interface Game {
-  id: string;
-  Name?: string; // Optional game name, if not provided, the name will be the teams and the date of the game.
-  Description?: string; // Optional game description. Ex. Pool play in the Olympics.
-  Date: string; // The official start time of the event
-  Teams: TeamID[];
-  Location: string;
-  GameEvents: GameEvent[];
-}
+import { z } from "zod";
 
-export interface Team {
-  id: TeamID;
-  Name: string;
-  Location: string;
-  Players: Player[];
-}
+export const GameEventSchema = z.object({
+  PlayerID: z.string(),
+});
 
-export interface Player {
-  id: PlayerID;
-  Name: string;
-  Number: number;
-  DateOfBirth?: string;
-  Image?: any; // TODO: Think about potentially adding Images for easier identification of players.
-}
+const PlayerSchema = z.object({
+  id: z.string(),
+  Name: z.string(),
+  Number: z.number(),
+  DateOfBirth: z.string().optional(),
+  Image: z.any().optional(), // TODO: Think about potentially adding Images for easier identification of players.
+});
 
-interface GameEvent {
-  PlayerID: PlayerID;
-}
+const TeamSchema = z.object({
+  id: z.string(),
+  Name: z.string(),
+  Location: z.string(),
+  Players: z.array(PlayerSchema),
+});
 
-type PlayerID = string;
-type TeamID = string;
+const GameSchema = z.object({
+  id: z.string(),
+  Name: z.string().optional(), // Optional game name, if not provided, the name will be the teams and the date of the game.
+  Description: z.string().optional(), // Optional game description. Ex. Pool play in the Olympics.
+  Date: z.string(), // The official start time of the event
+  Teams: z.array(z.string()), // TeamIDs
+  Location: z.string(),
+  GameEvents: z.array(GameEventSchema),
+});
+
+export const DataSourcesSchemaMap = {
+  teams: TeamSchema,
+  games: GameSchema,
+};
+
+export const DataSourcesNameMap = {
+  teams: "Teams",
+  games: "Games",
+};
+
+export type DataSources = "teams" | "games";
+
+export type TeamSchema = z.infer<typeof TeamSchema>;
+export type GameSchema = z.infer<typeof GameSchema>;
+
+export type DataSourceSchema = TeamSchema | GameSchema;
+
+export type DataSourceSchemaMap = {
+  [key in DataSources]: DataSourceSchema;
+};
