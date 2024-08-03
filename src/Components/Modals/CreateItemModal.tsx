@@ -8,6 +8,9 @@ interface Props extends ModalProps {
 export default function CreateItemModal({ open, onClose, dataSource }: Props) {
   const name = DataSourcesNameMap[dataSource];
 
+  // TODO: Convert Zod Schemas to Form generically
+  // TODO: Rename to UpsertItemModal, support create and update.
+
   return (
     <AppModal open={open} onClose={onClose}>
       <div className="py-16 px-2 text-2xl text-center">Create {name} Modal</div>

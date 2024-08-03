@@ -3,14 +3,16 @@ import useItems from "../../API/useItems";
 import AppBasicTable from "../../Components/AppBasicTable";
 import AppHeader from "../../Components/AppHeader";
 import CreateItemModal from "../../Components/Modals/CreateItemModal";
-import { TeamSchema } from "../../Types";
+import { ITeamSchema, TeamSchema } from "../../Types";
 import AppButton from "../../Components/AppButton";
 
 export default function Teams() {
-  const { items: teams, loading: teamsLoading } = useItems<TeamSchema>({
+  const { items: teams, loading: teamsLoading } = useItems<ITeamSchema>({
     dataSource: "teams",
   });
   const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
+
+  console.log(TeamSchema);
 
   return (
     <>

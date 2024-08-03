@@ -1,4 +1,4 @@
-import { GameSchema } from "../../Types";
+import { GameSchema, IGameSchema } from "../../Types";
 import useItems from "../../API/useItems";
 import AppHeader from "../../Components/AppHeader";
 import AppBasicTable from "../../Components/AppBasicTable";
@@ -7,10 +7,17 @@ import { useState } from "react";
 import CreateItemModal from "../../Components/Modals/CreateItemModal";
 
 export default function Games() {
-  const { items: games, loading: gamesLoading } = useItems<GameSchema>({
+  const { items: games, loading: gamesLoading } = useItems<IGameSchema>({
     dataSource: "games",
   });
   const [createGameModalOpen, setCreateGameModalOpen] = useState(false);
+
+  // Heres is how we can use Zod schemas to generate forms
+  console.log(
+    GameSchema.shape.Date._def.typeName,
+    GameSchema.shape.Date.isOptional()
+  );
+  console.log(GameSchema.shape.Name.isOptional());
 
   return (
     <>

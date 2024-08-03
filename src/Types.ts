@@ -12,14 +12,14 @@ const PlayerSchema = z.object({
   Image: z.any().optional(), // TODO: Think about potentially adding Images for easier identification of players.
 });
 
-const TeamSchema = z.object({
+export const TeamSchema = z.object({
   id: z.string(),
   Name: z.string(),
   Location: z.string(),
   Players: z.array(PlayerSchema),
 });
 
-const GameSchema = z.object({
+export const GameSchema = z.object({
   id: z.string(),
   Name: z.string().optional(), // Optional game name, if not provided, the name will be the teams and the date of the game.
   Description: z.string().optional(), // Optional game description. Ex. Pool play in the Olympics.
@@ -41,10 +41,10 @@ export const DataSourcesNameMap = {
 
 export type DataSources = "teams" | "games";
 
-export type TeamSchema = z.infer<typeof TeamSchema>;
-export type GameSchema = z.infer<typeof GameSchema>;
+export type ITeamSchema = z.infer<typeof TeamSchema>;
+export type IGameSchema = z.infer<typeof GameSchema>;
 
-export type DataSourceSchema = TeamSchema | GameSchema;
+export type DataSourceSchema = ITeamSchema | IGameSchema;
 
 export type DataSourceSchemaMap = {
   [key in DataSources]: DataSourceSchema;
