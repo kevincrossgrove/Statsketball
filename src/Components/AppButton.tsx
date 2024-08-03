@@ -28,7 +28,7 @@ const variants: Record<string, React.ComponentProps<"div">["className"]> = {
     "text-secondary border-secondary hover:text-background hover:bg-secondary",
   transparent: "bg-transparent ",
   danger:
-    "bg-danger border-danger text-background hover:bg-danger-dark hover:border-danger-dark",
+    "bg-danger border-danger text-white hover:bg-danger-dark hover:border-danger-dark",
   "danger-outline":
     "text-danger border-danger hover:text-background hover:bg-danger",
   white:

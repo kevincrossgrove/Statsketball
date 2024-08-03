@@ -2,9 +2,9 @@ import { useState } from "react";
 import useItems from "../../API/useItems";
 import AppBasicTable from "../../Components/AppBasicTable";
 import AppHeader from "../../Components/AppHeader";
-import CreateItemModal from "../../Components/Modals/CreateItemModal";
 import { ITeamSchema, TeamSchema } from "../../Types";
 import AppButton from "../../Components/AppButton";
+import UpsertTeamModal from "../../Components/Modals/UpsertTeamModal";
 
 export default function Teams() {
   const { items: teams, loading: teamsLoading } = useItems<ITeamSchema>({
@@ -34,10 +34,9 @@ export default function Teams() {
         getItemSubtitle={(team) => team.Location}
         emptyMessage="No teams have been added."
       />
-      <CreateItemModal
+      <UpsertTeamModal
         open={createTeamModalOpen}
         onClose={() => setCreateTeamModalOpen(false)}
-        dataSource="teams"
       />
     </>
   );
