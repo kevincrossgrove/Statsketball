@@ -25,7 +25,7 @@ export const GamePayloadSchema = z.object({
   Description: z.string().optional(), // Optional game description. Ex. Pool play in the Olympics.
   Date: z.string(), // The official start time of the event
   Teams: z.array(z.string()), // TeamIDs
-  Location: z.string(),
+  Location: z.string().optional(),
 });
 
 export const GameSchema = GamePayloadSchema.extend({

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import useItems from "../../API/useItems";
-import AppBasicTable from "../../Components/AppBasicTable";
-import AppHeader from "../../Components/AppHeader";
+import useItems from "../../utils/useItems";
+import AppBasicTable from "../../components/AppBasicTable";
+import AppHeader from "../../components/AppHeader";
 import { ITeamSchema, TeamSchema } from "../../Types";
-import AppButton from "../../Components/AppButton";
-import UpsertTeamModal from "../../Components/Modals/UpsertTeamModal";
+import AppButton from "../../components/AppButton";
+import UpsertTeamModal from "../../components/modals/UpsertTeamModal";
 
 export default function Teams() {
   const { items: teams, loading: teamsLoading } = useItems<ITeamSchema>({

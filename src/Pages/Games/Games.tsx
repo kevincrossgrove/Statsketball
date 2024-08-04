@@ -1,10 +1,10 @@
 import { GameSchema, IGameSchema } from "../../Types";
-import useItems from "../../API/useItems";
-import AppHeader from "../../Components/AppHeader";
-import AppBasicTable from "../../Components/AppBasicTable";
-import AppButton from "../../Components/AppButton";
+import useItems from "../../utils/useItems";
+import AppHeader from "../../components/AppHeader";
+import AppBasicTable from "../../components/AppBasicTable";
+import AppButton from "../../components/AppButton";
 import { useState } from "react";
-import UpsertGameModal from "../../Components/Modals/UpsertGameModal";
+import UpsertGameModal from "../../components/modals/UpsertGameModal";
 
 export default function Games() {
   const { items: games, loading: gamesLoading } = useItems<IGameSchema>({

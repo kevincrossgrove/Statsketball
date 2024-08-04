@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataSources, DataSourceSchema } from "../Types";
-import RecordAPI from "./RecordAPI";
+import RecordAPI from "../utils/RecordAPI";
 
 interface Props {
   dataSource: DataSources;

@@ -1,53 +1,47 @@
 import { twMerge } from "tailwind-merge";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { DatePicker } from "./ui/datepicker";
 
 interface Props {
-  zodType: string;
-  fieldName?: string;
+  type: "Text" | "LongText" | "Date";
   placeholder: string;
   required: boolean;
+  className?: string;
 }
 
-const baseCSS = "block w-full rounded-md border-2 border-gray-300 p-2 text-sm";
+const baseCSS = "mb-3";
 
 export default function AppInput({
-  zodType,
-  fieldName,
+  type,
   placeholder,
   required,
+  className,
 }: Props) {
-  if (zodType === "ZodString" && fieldName === "Description") {
+  if (type === "LongText") {
     return (
-      <textarea
+      <Textarea
         placeholder={placeholder}
         required={required}
-        className={twMerge(baseCSS)}
+        className={twMerge(baseCSS, className)}
       />
     );
   }
 
-  if (zodType === "ZodString" && fieldName === "Date") {
-    return (
-      <input
-        type="date"
-        placeholder={placeholder}
-        required={required}
-        className={twMerge(baseCSS)}
-      />
-    );
+  if (type === "Date") {
+    return <DatePicker />;
   }
 
-  if (zodType === "ZodString") {
+  if (type === "Text") {
     return (
-      <input
+      <Input
         type="text"
         placeholder={placeholder}
         required={required}
-        className={twMerge(baseCSS)}
+        className={twMerge(baseCSS, className)}
       />
     );
   }
-
-  console.log("No code written for", zodType);
 
   return null;
 }

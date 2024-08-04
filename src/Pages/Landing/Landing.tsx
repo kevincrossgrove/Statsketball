@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import AppBasicCard from "../../Components/AppBasicCard";
+import AppBasicCard from "../../components/AppBasicCard";
 
 export default function Landing() {
   const navigate = useNavigate();

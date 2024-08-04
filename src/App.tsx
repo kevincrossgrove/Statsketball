@@ -2,10 +2,10 @@
 // Quarters - Update the quarter/half
 // Players - On Left/Right side of screen
 
-import Landing from "./Pages/Landing/Landing";
+import Landing from "./pages/Landing/Landing";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Teams from "./Pages/Teams/Teams";
-import Games from "./Pages/Games/Games";
+import Teams from "./pages/Teams/Teams";
+import Games from "./pages/Games/Games";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

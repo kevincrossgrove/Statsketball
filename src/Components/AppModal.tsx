@@ -1,5 +1,12 @@
 import { useEffect, useRef } from "react";
-import { twMerge } from "tailwind-merge";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 
 export interface ModalProps {
   open: boolean;
@@ -7,6 +14,7 @@ export interface ModalProps {
 }
 
 interface Props extends ModalProps {
+  title: string;
   children: React.ReactNode;
   dialogClassName?: string;
   className?: string;
@@ -15,6 +23,7 @@ interface Props extends ModalProps {
 export default function AppModal({
   open,
   onClose,
+  title,
   children,
   dialogClassName,
   className,
@@ -27,19 +36,13 @@ export default function AppModal({
   }, [open]);
 
   return (
-    <dialog
-      ref={modalRef}
-      className={twMerge("rounded-lg max-w-md w-full", dialogClassName)}
-    >
-      <div className="w-full flex justify-end">
-        <div
-          className="pb-3 px-4 hover:bg-gray-200 font-bold text-3xl cursor-pointer flex justify-center items-center"
-          onClick={onClose}
-        >
-          x
-        </div>
-      </div>
-      <div className={twMerge("p-4", className)}>{children}</div>
-    </dialog>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {children}
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }
