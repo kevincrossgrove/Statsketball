@@ -1,9 +1,16 @@
-import { DataSources, DataSourceSchema } from "../Types";
+import {
+  DataSourcePayloadSchema,
+  DataSources,
+  DataSourceSchema,
+} from "../Types";
 import API from "./API";
 import ShortUniqueId from "short-unique-id";
 
 // RecordAPI class. Just provide the moduleAPIName when creating an instance of the class
-export default class RecordAPI<T extends DataSourceSchema> {
+export default class RecordAPI<
+  PayloadT extends DataSourcePayloadSchema,
+  SavedT extends DataSourceSchema
+> {
   url: string;
 
   constructor(dataSource: DataSources) {
@@ -13,9 +20,9 @@ export default class RecordAPI<T extends DataSourceSchema> {
   // Get all records in a specified module
   GetAll() {
     // Mock async call with setTimeout
-    return new Promise<T[]>((resolve) => {
+    return new Promise<SavedT[]>((resolve) => {
       const dataString = localStorage.getItem(this.url);
-      let savedData: T[];
+      let savedData: SavedT[];
 
       if (!dataString) savedData = [];
       else savedData = JSON.parse(dataString);
@@ -87,19 +94,22 @@ export default class RecordAPI<T extends DataSourceSchema> {
   }
 
   // Create a record in a specified module
-  Create(data: T) {
+  Create(data: PayloadT) {
     // Mock async call with setTimeout
-    return new Promise((resolve) => {
-      if (!data.id) data.id = new ShortUniqueId().toString();
+    return new Promise<SavedT>((resolve) => {
+      // @ts-expect-error
+      const finalData: SavedT = { ...data, id: new ShortUniqueId().toString() };
 
       const dataString = localStorage.getItem(this.url);
 
-      let savedData: T[];
+      let savedData: SavedT[];
 
       if (!dataString) savedData = [];
       else savedData = JSON.parse(dataString);
 
-      savedData.push(data);
+      savedData.push(finalData);
+
+      console.log("Saved data");
 
       localStorage.setItem(this.url, JSON.stringify(savedData));
 
@@ -116,11 +126,11 @@ export default class RecordAPI<T extends DataSourceSchema> {
   }
 
   // Update a record by id
-  Update(id: string, data: T) {
+  Update(id: string, data: SavedT) {
     // Mock async call with setTimeout
     return new Promise((resolve) => {
       const dataString = localStorage.getItem(this.url);
-      let savedData: T[];
+      let savedData: SavedT[];
 
       if (!dataString) throw new Error("Item not found");
       else savedData = JSON.parse(dataString);
@@ -152,7 +162,7 @@ export default class RecordAPI<T extends DataSourceSchema> {
     // Mock async call with setTimeout
     return new Promise((resolve) => {
       const dataString = localStorage.getItem(this.url);
-      let savedData: T[];
+      let savedData: SavedT[];
 
       if (!dataString) throw new Error("Item not found");
       else savedData = JSON.parse(dataString);

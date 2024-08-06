@@ -2,14 +2,21 @@ import { useState } from "react";
 import AppInput from "../AppInput";
 import AppModal, { ModalProps } from "../AppModal";
 import { Button } from "../ui/button";
+import useCreateItem from "@/utils/useCreateItem";
+import { IPlayerPayloadSchema, IPlayerSchema } from "@/Types";
 
 interface Props extends ModalProps {}
 
 export default function UpsertPlayerModal({ open, onClose }: Props) {
   const [name, setName] = useState("");
   const [number, setNumber] = useState<number>(0);
-  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState<Date>();
   const [height, setHeight] = useState("");
+
+  const { create: createPlayer, creating: creatingPlayer } = useCreateItem<
+    IPlayerPayloadSchema,
+    IPlayerSchema
+  >("players");
 
   return (
     <AppModal
@@ -43,7 +50,7 @@ export default function UpsertPlayerModal({ open, onClose }: Props) {
           placeholder="Date of Birth"
           required={false}
           value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)}
+          onChange={(date) => setDateOfBirth(date)}
         />
         <label>Height</label>
         <AppInput
@@ -67,6 +74,20 @@ export default function UpsertPlayerModal({ open, onClose }: Props) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitted");
+    console.log("Submitted", {
+      name,
+      number,
+      dateOfBirth,
+      height,
+    });
+
+    createPlayer({
+      payload: {
+        Name: name,
+        Number: number,
+        DateOfBirth: dateOfBirth?.toISOString(),
+        Height: height,
+      },
+    });
   }
 }

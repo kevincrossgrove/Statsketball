@@ -16,7 +16,7 @@ export default function useItems<T extends DataSourceSchema>({
   const items = useQuery<T[]>({
     queryKey: [dataSource],
     queryFn: () => {
-      const ItemAPI = new RecordAPI<T>(dataSource);
+      const ItemAPI = new RecordAPI<T, T>(dataSource);
 
       return ItemAPI.GetAll().catch((error) => {
         console.error(error);

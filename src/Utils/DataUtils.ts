@@ -1,7 +1,7 @@
-import { DataSources, DataSourcesSchemaMap } from "../Types";
+import { DataSources, DataSourcesPayloadSchemaMap } from "../Types";
 
 export function ValidateItem<T>(dataSource: DataSources, data: T) {
-  const schema = DataSourcesSchemaMap[dataSource];
+  const schema = DataSourcesPayloadSchemaMap[dataSource];
 
   if (!schema) {
     throw new Error(`DataSource ${dataSource} not found`);
