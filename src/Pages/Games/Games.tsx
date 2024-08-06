@@ -2,9 +2,10 @@ import { GameSchema, IGameSchema } from "../../Types";
 import useItems from "../../utils/useItems";
 import AppHeader from "../../components/AppHeader";
 import AppBasicTable from "../../components/AppBasicTable";
-import AppButton from "../../components/AppButton";
+
 import { useState } from "react";
 import UpsertGameModal from "../../components/modals/UpsertGameModal";
+import { Button } from "@/components/ui/button";
 
 export default function Games() {
   const { items: games, loading: gamesLoading } = useItems<IGameSchema>({
@@ -17,12 +18,9 @@ export default function Games() {
       <AppHeader
         title="Games"
         actions={
-          <AppButton
-            color="secondary"
-            onClick={() => setCreateGameModalOpen(true)}
-          >
+          <Button variant="green" onClick={() => setCreateGameModalOpen(true)}>
             Create Game
-          </AppButton>
+          </Button>
         }
       />
       <AppBasicTable

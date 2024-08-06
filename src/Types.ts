@@ -9,6 +9,7 @@ const PlayerSchema = z.object({
   Name: z.string(),
   Number: z.number(),
   DateOfBirth: z.string().optional(),
+  Height: z.string().optional(),
   Image: z.any().optional(), // TODO: Think about potentially adding Images for easier identification of players.
 });
 
@@ -36,24 +37,28 @@ export const GameSchema = GamePayloadSchema.extend({
 export const DataSourcesPayloadSchemaMap = {
   teams: GamePayloadSchema,
   games: GamePayloadSchema,
+  players: GamePayloadSchema,
 };
 
 export const DataSourcesSchemaMap = {
   teams: TeamSchema,
   games: GameSchema,
+  players: PlayerSchema,
 };
 
 export const DataSourcesNameMap = {
   teams: "Teams",
   games: "Games",
+  players: "Players",
 };
 
-export type DataSources = "teams" | "games";
+export type DataSources = "teams" | "games" | "players";
 
 export type ITeamSchema = z.infer<typeof TeamSchema>;
 export type IGameSchema = z.infer<typeof GameSchema>;
+export type IPlayerSchema = z.infer<typeof PlayerSchema>;
 
-export type DataSourceSchema = ITeamSchema | IGameSchema;
+export type DataSourceSchema = ITeamSchema | IGameSchema | IPlayerSchema;
 
 export type DataSourceSchemaMap = {
   [key in DataSources]: DataSourceSchema;

@@ -8,6 +8,7 @@ import Teams from "./pages/Teams/Teams";
 import Games from "./pages/Games/Games";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Players from "./pages/Players/Players";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,10 @@ const AppRouter = createBrowserRouter([
   {
     path: "/teams",
     element: <Teams />,
+  },
+  {
+    path: "/players",
+    element: <Players />,
   },
 ]);
 

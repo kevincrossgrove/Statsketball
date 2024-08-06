@@ -9,6 +9,7 @@ export default function Landing() {
       <h1 className="text-3xl text-text">Statsketball</h1>
       <AppBasicCard title={"Games"} onClick={() => navigate("/games")} />
       <AppBasicCard title={"Teams"} onClick={() => navigate("/teams")} />
+      <AppBasicCard title={"Players"} onClick={() => navigate("/players")} />
     </div>
   );
 }

@@ -1,7 +1,8 @@
-"use client";
+// Its api is very similar to the input-OTP component
+// Supply a Schema, current Value, and a onChange function props
+// I have exported a schema type just to help
 
-import { Check, ChevronsUpDown } from "lucide-react";
-
+import { Check, ChevronsUpDown, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,86 +21,92 @@ import {
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
-interface Props {
-  placeholder: string;
-  className?: string;
-  required?: boolean;
+export interface Option {
+  value: string;
+  label: string;
 }
 
-export function SelectPicker({ placeholder, className, required }: Props) {
+// make a interface called ComboboxSchema that extends Option[]
+export type ComboboxSchema = Option[];
+
+interface Props {
+  options: Option[];
+  value: string;
+  onChange: (value: string) => void;
+  className?: string;
+  placeholder: string;
+  required?: boolean;
+  label?: string;
+  onCreate?: () => void;
+}
+
+export function SelectPicker({
+  options = [{ value: "", label: "" }],
+  value,
+  onChange,
+  className,
+  placeholder,
+  required,
+  label,
+  onCreate,
+}: Props) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <div className="flex w-full gap-2">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={twMerge("w-full justify-between mb-3", className)}
+          >
+            {value
+              ? options.find((option) => option.value === value)?.label
+              : placeholder}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Search option..." />
+            <CommandEmpty>No {label || "option"} found.</CommandEmpty>
+            <CommandList>
+              <CommandGroup>
+                {options.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    value={option.value}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? "" : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {option.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      {onCreate && (
         <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={twMerge("w-full justify-between mb-3", className)}
+          variant="green"
+          onClick={onCreate}
+          className="px-2"
+          type="button"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <Plus className="text-white" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className={"w-full p-0"}>
-        <Command>
-          <CommandInput
-            placeholder="Search framework..."
-            required={required}
-            value={value}
-          />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandList>
-            <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   );
 }

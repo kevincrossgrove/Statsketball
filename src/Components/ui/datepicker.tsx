@@ -19,6 +19,8 @@ export function DatePicker() {
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          type="button"
+          onClick={(e) => e.stopPropagation()}
           className={cn(
             "w-full mb-3 justify-start text-left font-normal",
             !date && "text-muted-foreground"
