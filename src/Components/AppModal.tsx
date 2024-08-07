@@ -1,12 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
 export interface ModalProps {
   open: boolean;
@@ -16,8 +10,7 @@ export interface ModalProps {
 interface Props extends ModalProps {
   title: string;
   children: React.ReactNode;
-  dialogClassName?: string;
-  className?: string;
+  overlay?: boolean;
 }
 
 export default function AppModal({
@@ -25,8 +18,7 @@ export default function AppModal({
   onClose,
   title,
   children,
-  dialogClassName,
-  className,
+  overlay = true,
 }: Props) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -37,7 +29,7 @@ export default function AppModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent overlay={overlay}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {children}

@@ -5,9 +5,15 @@ import { Button } from "../ui/button";
 import useCreateItem from "@/utils/useCreateItem";
 import { IPlayerPayloadSchema, IPlayerSchema } from "@/Types";
 
-interface Props extends ModalProps {}
+interface Props extends ModalProps {
+  overlay?: boolean;
+}
 
-export default function UpsertPlayerModal({ open, onClose }: Props) {
+export default function UpsertPlayerModal({
+  open,
+  onClose,
+  overlay = true,
+}: Props) {
   const [name, setName] = useState("");
   const [number, setNumber] = useState<number>(0);
   const [dateOfBirth, setDateOfBirth] = useState<Date>();
@@ -23,6 +29,7 @@ export default function UpsertPlayerModal({ open, onClose }: Props) {
       title={true ? "New Player" : "Editing Player"}
       open={open}
       onClose={onClose}
+      overlay={overlay}
     >
       <form
         onSubmit={handleSubmit}

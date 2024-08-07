@@ -2,7 +2,7 @@ import { useState } from "react";
 import useItems from "../../utils/useItems";
 import AppBasicTable from "../../components/AppBasicTable";
 import AppHeader from "../../components/AppHeader";
-import { ITeamSchema, TeamSchema } from "../../Types";
+import { ITeamSchema } from "../../Types";
 import UpsertTeamModal from "../../components/modals/UpsertTeamModal";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,6 @@ export default function Teams() {
   });
   const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
   const navigate = useNavigate();
-
-  console.log(TeamSchema);
 
   return (
     <>

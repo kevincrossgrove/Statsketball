@@ -22,7 +22,7 @@ export const PlayerSchema = PlayerPayloadSchema.merge(IdSchema);
 export const TeamPayloadSchema = z.object({
   Name: z.string(),
   Location: z.string(),
-  Players: z.array(PlayerSchema),
+  Players: z.array(z.string()),
 });
 
 export const TeamSchema = TeamPayloadSchema.merge(IdSchema);
