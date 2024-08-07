@@ -3,28 +3,28 @@ import useItems from "../../utils/useItems";
 import AppBasicTable from "../../components/AppBasicTable";
 import AppHeader from "../../components/AppHeader";
 import { ITeamSchema, TeamSchema } from "../../Types";
-import AppButton from "../../components/AppButton";
 import UpsertTeamModal from "../../components/modals/UpsertTeamModal";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function Teams() {
   const { items: teams, loading: teamsLoading } = useItems<ITeamSchema>({
     dataSource: "teams",
   });
   const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   console.log(TeamSchema);
 
   return (
     <>
       <AppHeader
+        backAction={() => navigate("/")}
         title="Teams"
         actions={
-          <AppButton
-            color="secondary"
-            onClick={() => setCreateTeamModalOpen(true)}
-          >
+          <Button variant="green" onClick={() => setCreateTeamModalOpen(true)}>
             Create Team
-          </AppButton>
+          </Button>
         }
       />
       <AppBasicTable

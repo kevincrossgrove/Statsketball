@@ -1,4 +1,4 @@
-import { GameSchema, IGameSchema } from "../../Types";
+import { IGameSchema } from "../../Types";
 import useItems from "../../utils/useItems";
 import AppHeader from "../../components/AppHeader";
 import AppBasicTable from "../../components/AppBasicTable";
@@ -6,6 +6,7 @@ import AppBasicTable from "../../components/AppBasicTable";
 import { useState } from "react";
 import UpsertGameModal from "../../components/modals/UpsertGameModal";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Games() {
   const { items: games, loading: gamesLoading } = useItems<IGameSchema>({
@@ -13,9 +14,12 @@ export default function Games() {
   });
   const [createGameModalOpen, setCreateGameModalOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   return (
     <>
       <AppHeader
+        backAction={() => navigate("/")}
         title="Games"
         actions={
           <Button variant="green" onClick={() => setCreateGameModalOpen(true)}>

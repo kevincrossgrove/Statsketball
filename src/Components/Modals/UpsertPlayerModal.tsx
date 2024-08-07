@@ -64,13 +64,26 @@ export default function UpsertPlayerModal({ open, onClose }: Props) {
           <Button variant="outline" type="button" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="green">
+          <Button
+            type="submit"
+            variant="green"
+            loading={creatingPlayer}
+            loadingText="Saving..."
+          >
             Submit
           </Button>
         </div>
       </form>
     </AppModal>
   );
+
+  function handleClose() {
+    setName("");
+    setNumber(0);
+    setDateOfBirth(undefined);
+    setHeight("");
+    onClose();
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -88,6 +101,7 @@ export default function UpsertPlayerModal({ open, onClose }: Props) {
         DateOfBirth: dateOfBirth?.toISOString(),
         Height: height,
       },
+      onSuccess: handleClose,
     });
   }
 }

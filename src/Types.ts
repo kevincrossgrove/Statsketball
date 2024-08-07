@@ -41,9 +41,9 @@ export const GameSchema = GamePayloadSchema.merge(IdSchema).extend({
 });
 
 export const DataSourcesPayloadSchemaMap = {
-  teams: GamePayloadSchema,
+  teams: TeamPayloadSchema,
   games: GamePayloadSchema,
-  players: GamePayloadSchema,
+  players: PlayerPayloadSchema,
 };
 
 export const DataSourcesSchemaMap = {

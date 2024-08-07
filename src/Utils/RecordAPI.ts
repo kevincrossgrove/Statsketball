@@ -97,8 +97,11 @@ export default class RecordAPI<
   Create(data: PayloadT) {
     // Mock async call with setTimeout
     return new Promise<SavedT>((resolve) => {
+      const idGenerator = new ShortUniqueId();
+      const id = idGenerator.randomUUID();
+
       // @ts-expect-error
-      const finalData: SavedT = { ...data, id: new ShortUniqueId().toString() };
+      const finalData: SavedT = { ...data, id };
 
       const dataString = localStorage.getItem(this.url);
 

@@ -31,6 +31,8 @@
     --chart-5: 27 87% 67%;
     --green: 142 51% 43%;
     --green-foreground: 222.2 47.4% 11.2%;
+    --danger: 1, 100%, 50%;
+    --danger-foreground: 1, 100%, 35%;
   }
 
   .dark {

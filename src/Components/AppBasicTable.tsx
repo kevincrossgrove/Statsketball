@@ -35,15 +35,16 @@ function AppBasicTable<T>({
           return (
             <div
               key={i}
-              className={`d-flex align-items-center justify-content-between rounded-sm btn-oauth cursor-pointer w-100 ${
+              className={`flex items-center justify-between btn-oauth cursor-pointer w-100 my-1 mx-3 border rounded py-2 pl-6 pr-4 hover:bg-secondary ${
                 getItemStyle ? getItemStyle(item) : ""
               } ${onClick ? "bg-ultralight--hover" : ""}`}
-              style={{ padding: "10px 17px", margin: "2px 0" }}
               onClick={onClick ? () => onClick(item) : undefined}
             >
               {getItemIcon && getItemIcon(item)}
               <div className="text-truncate" style={{ flex: 1 }}>
-                <h4 className="mb-0 text-truncate">{getItemTitle(item)}</h4>
+                <h4 className="mb-0 text-truncate font-semibold">
+                  {getItemTitle(item)}
+                </h4>
                 {getItemSubtitle && <small>{getItemSubtitle(item)}</small>}
               </div>
               {CustomRenderer

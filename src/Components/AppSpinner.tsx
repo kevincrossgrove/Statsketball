@@ -5,6 +5,7 @@ const Colors = {
   primary: "text-primary",
   secondary: "text-secondary",
   gray: "text-gray",
+  danger: "text-danger",
 };
 
 const Sizes = {
@@ -17,7 +18,7 @@ export default function AppSpinner({
   color = "white",
   size = "sm",
 }: {
-  color?: "white" | "primary" | "secondary" | "gray";
+  color?: "white" | "primary" | "secondary" | "gray" | "danger";
   size?: "sm" | "md" | "lg";
 }) {
   const css = twMerge(
