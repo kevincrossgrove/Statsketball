@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import AppLoading from "./AppLoading";
+import { Skeleton } from "./ui/skeleton";
 
 interface Props<T> {
   loading: boolean;
@@ -29,13 +29,23 @@ function AppBasicTable<T>({
   const Table = (
     <div className={containerCSS}>
       {loading ? (
-        <AppLoading />
+        <div className="mx-4">
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+          <Skeleton className="w-full h-16 my-1" />
+        </div>
       ) : Array.isArray(items) && items.length > 0 ? (
         items?.map((item, i) => {
           return (
             <div
               key={i}
-              className={`flex items-center justify-between btn-oauth cursor-pointer w-100 my-1 mx-3 border rounded py-2 pl-6 pr-4 hover:bg-secondary ${
+              className={`h-16 flex items-center justify-between btn-oauth cursor-pointer w-100 my-1 mx-4 border rounded py-2 pl-6 pr-4 hover:bg-secondary ${
                 getItemStyle ? getItemStyle(item) : ""
               } ${onClick ? "bg-ultralight--hover" : ""}`}
               onClick={onClick ? () => onClick(item) : undefined}
@@ -59,7 +69,7 @@ function AppBasicTable<T>({
           );
         })
       ) : (
-        <div className="px-3 py-4 font-weight-500 bg-ultralight rounded">
+        <div className="px-4 py-4 font-weight-500 bg-ultralight rounded mx-3 border bg-muted font-semibold">
           {emptyMessage || "No items have been added."}
         </div>
       )}
