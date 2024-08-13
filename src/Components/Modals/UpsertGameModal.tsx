@@ -110,6 +110,5 @@ export default function UpsertGameModal({ open, onClose }: Props) {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitted");
   }
 }

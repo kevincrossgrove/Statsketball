@@ -38,6 +38,7 @@ interface Props {
   required?: boolean;
   label?: string;
   onCreate?: () => void;
+  multiple?: boolean;
 }
 
 export function SelectPicker({
@@ -49,6 +50,7 @@ export function SelectPicker({
   required,
   label,
   onCreate,
+  multiple,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -80,7 +82,7 @@ export function SelectPicker({
                     value={option.value}
                     onSelect={(currentValue) => {
                       onChange(currentValue === value ? "" : currentValue);
-                      setOpen(false);
+                      !multiple && setOpen(false);
                     }}
                   >
                     <Check

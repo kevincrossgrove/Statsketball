@@ -27,17 +27,12 @@ export default function useDeleteItem<T extends DataSourceSchema>({
       return ItemAPI.DeleteByID(id);
     },
     onSuccess: (_, { id, onSuccess }) => {
-      const data = client.getQueryData([dataSource]);
-
-      console.log("existing data", data);
-
       client.setQueryData<T[]>([dataSource], (prev) => {
         if (!prev || !Array.isArray(prev)) return [];
 
         return prev.filter((prev) => prev.id !== id);
       });
 
-      console.log("Successfully deleted item with id");
       onSuccess && onSuccess();
     },
     onError: (error, { onError }) => {

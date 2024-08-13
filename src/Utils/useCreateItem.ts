@@ -24,8 +24,6 @@ export default function useCreateItem<
     mutationFn: ({ payload }: MutationProps<T, S>) => {
       const ItemAPI = new RecordAPI<T, S>(dataSource);
 
-      console.log(dataSource);
-
       ValidateItem(dataSource, payload);
 
       return ItemAPI.Create(payload);
@@ -36,12 +34,10 @@ export default function useCreateItem<
 
         return [...prev, data];
       });
-      console.log("Successfully created item");
+
       onSuccess && onSuccess(data);
     },
     onError: (error, { onError }) => {
-      // @ts-ignore
-      console.log(error.issues);
       onError && onError(error?.message || "Error creating item");
     },
   });

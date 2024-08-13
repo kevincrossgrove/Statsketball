@@ -7,6 +7,7 @@ import useItems from "@/utils/useItems";
 import { Button } from "../ui/button";
 import useCreateItem from "@/utils/useCreateItem";
 import UpsertPlayerModal from "./UpsertPlayerModal";
+import { X } from "lucide-react";
 
 interface Props extends ModalProps {}
 
@@ -75,19 +76,39 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
           />
           <label>Players</label>
           <SelectPicker
-            placeholder="Select 5 players"
+            placeholder="Select at least 5 players"
             required={true}
             options={playerOptions}
             value={""}
             onChange={(value) => setTeamPlayers((prev) => [...prev, value])}
             label="players"
             onCreate={() => setCreatePlayerModal(true)}
+            multiple={true}
           />
-          {teamPlayers.length > 0 &&
-            teamPlayers.map((playerID) => {
-              const player = playersMap[playerID];
-              return <div>{player?.Name}</div>;
-            })}
+          {teamPlayers.length > 0 && (
+            <div className="flex flex-col gap-2 mb-4">
+              {teamPlayers.map((playerID) => {
+                const player = playersMap[playerID];
+                // Card like css styles for each player
+                return (
+                  <div
+                    className="flex justify-between items-center border rounded p-2 hover:bg-secondary"
+                    key={playerID}
+                  >
+                    {player?.Name}{" "}
+                    <X
+                      className="text-red-500 w-5 h-5 cursor-pointer"
+                      onClick={() =>
+                        setTeamPlayers(
+                          teamPlayers.filter((p) => p !== playerID)
+                        )
+                      }
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={handleClose}>
               Cancel
@@ -106,6 +127,9 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
       <UpsertPlayerModal
         open={createPlayerModal}
         onClose={() => setCreatePlayerModal(false)}
+        onCreate={(newPlayerID) =>
+          setTeamPlayers((prev) => [...prev, newPlayerID])
+        }
         overlay={false}
       />
     </>

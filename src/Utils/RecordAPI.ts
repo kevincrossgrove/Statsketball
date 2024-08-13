@@ -112,8 +112,6 @@ export default class RecordAPI<
 
       savedData.push(finalData);
 
-      console.log("Saved data");
-
       localStorage.setItem(this.url, JSON.stringify(savedData));
 
       setTimeout(() => {

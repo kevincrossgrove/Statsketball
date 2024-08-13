@@ -7,15 +7,17 @@ import { IPlayerPayloadSchema, IPlayerSchema } from "@/Types";
 
 interface Props extends ModalProps {
   overlay?: boolean;
+  onCreate?: (newPlayer: string) => void;
 }
 
 export default function UpsertPlayerModal({
   open,
   onClose,
+  onCreate,
   overlay = true,
 }: Props) {
   const [name, setName] = useState("");
-  const [number, setNumber] = useState<number>(0);
+  const [number, setNumber] = useState<number>();
   const [dateOfBirth, setDateOfBirth] = useState<Date>();
   const [height, setHeight] = useState("");
 
@@ -94,12 +96,8 @@ export default function UpsertPlayerModal({
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitted", {
-      name,
-      number,
-      dateOfBirth,
-      height,
-    });
+
+    if (typeof number !== "number") return;
 
     createPlayer({
       payload: {
@@ -108,7 +106,10 @@ export default function UpsertPlayerModal({
         DateOfBirth: dateOfBirth?.toISOString(),
         Height: height,
       },
-      onSuccess: handleClose,
+      onSuccess: (newPlayerID) => {
+        handleClose();
+        onCreate && onCreate(newPlayerID.id);
+      },
     });
   }
 }
