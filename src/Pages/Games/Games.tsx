@@ -7,6 +7,7 @@ import { useState } from "react";
 import UpsertGameModal from "../../components/modals/UpsertGameModal";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export default function Games() {
   const { items: games, loading: gamesLoading } = useItems<IGameSchema>({
@@ -31,7 +32,7 @@ export default function Games() {
         loading={gamesLoading}
         items={games}
         getItemTitle={(game) => game.Name}
-        getItemSubtitle={(game) => game.Date}
+        getItemSubtitle={(game) => dayjs(game.Date).format("MMMM D, YYYY")}
         emptyMessage="No games have been added."
       />
       <UpsertGameModal

@@ -52,7 +52,7 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
       <AppModal
         open={open}
         onClose={handleClose}
-        title={true ? "New Team" : "Editing Team"}
+        title={typeof teamName === "string" ? "New Team" : "Editing Team"}
       >
         <form
           onSubmit={handleSubmit}
@@ -64,7 +64,7 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
             placeholder="Team Name"
             required={true}
             value={teamName}
-            onChange={(e) => setTeamName(e.target.value)}
+            onChange={setTeamName}
           />
           <label>Location</label>
           <AppInput
@@ -72,7 +72,7 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
             placeholder="Location"
             required={false}
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={setLocation}
           />
           <label>Players</label>
           <SelectPicker

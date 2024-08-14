@@ -28,7 +28,7 @@ export default function UpsertPlayerModal({
 
   return (
     <AppModal
-      title={true ? "New Player" : "Editing Player"}
+      title={typeof height === "string" ? "New Player" : "Editing Player"}
       open={open}
       onClose={onClose}
       overlay={overlay}
@@ -43,7 +43,7 @@ export default function UpsertPlayerModal({
           placeholder="Player Name"
           required={true}
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={setName}
         />
         <label>Player Number</label>
         <AppInput
@@ -51,7 +51,7 @@ export default function UpsertPlayerModal({
           placeholder="Number"
           required={true}
           value={number}
-          onChange={(e) => setNumber(Number(e.target.value))}
+          onChange={setNumber}
         />
         <label>Date of Birth</label>
         <AppInput
@@ -59,7 +59,7 @@ export default function UpsertPlayerModal({
           placeholder="Date of Birth"
           required={false}
           value={dateOfBirth}
-          onChange={(date) => setDateOfBirth(date)}
+          onChange={setDateOfBirth}
         />
         <label>Height</label>
         <AppInput
@@ -67,7 +67,7 @@ export default function UpsertPlayerModal({
           placeholder="Height"
           required={false}
           value={height}
-          onChange={(e) => setHeight(e.target.value)}
+          onChange={setHeight}
         />
         <div className="flex justify-end gap-2">
           <Button variant="outline" type="button" onClick={onClose}>

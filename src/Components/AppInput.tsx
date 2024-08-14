@@ -12,19 +12,19 @@ type BaseProps = {
 type NumberProps = {
   type: "Number";
   value?: number;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (val: number | undefined) => void;
 };
 
 type TextProps = {
   type: "Text";
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (val: string) => void;
 };
 
 type LongTextProps = {
   type: "LongText";
   value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (val: string) => void;
 };
 
 type DateProps = {
@@ -54,7 +54,7 @@ export default function AppInput({
         required={required}
         className={twMerge(baseCSS, className)}
         value={value}
-        onChange={onChange}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
       />
     );
   }
@@ -63,7 +63,7 @@ export default function AppInput({
     return <DatePicker value={value} onChange={onChange} />;
   }
 
-  if (type === "Text" || type === "Number") {
+  if (type === "Text") {
     return (
       <Input
         type={type === "Text" ? "text" : "number"}
@@ -71,7 +71,22 @@ export default function AppInput({
         required={required}
         className={twMerge(baseCSS, className)}
         value={value}
-        onChange={onChange}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+      />
+    );
+  }
+
+  if (type === "Number") {
+    return (
+      <Input
+        type={"number"}
+        placeholder={placeholder}
+        required={required}
+        className={twMerge(baseCSS, className)}
+        value={value}
+        onChange={
+          onChange ? (e) => onChange(parseInt(e.target.value)) : undefined
+        }
       />
     );
   }
