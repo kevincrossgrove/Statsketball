@@ -34,6 +34,7 @@ export default function Games() {
         getItemTitle={(game) => game.Name}
         getItemSubtitle={(game) => dayjs(game.Date).format("MMMM D, YYYY")}
         emptyMessage="No games have been added."
+        onClick={(item) => navigate(`/games/${item.id}`)}
       />
       <UpsertGameModal
         open={createGameModalOpen}
