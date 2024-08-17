@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import xSymbolSvg from "./x-symbol-svgrepo-com.svg";
+import xSymbolSvg from "./XSymbol.svg";
+import nbaCourtSvg from "./NBACourt.svg";
+// import nbaCourtMobile from "./NBACourtMobile.png";
 
 type ClickLocation = {
   type: "make" | "miss";
@@ -14,7 +16,7 @@ const offset = circleRadius / 2;
 export default function Game() {
   const { id } = useParams<{ id: string }>();
   const [clicks, setClicks] = useState<ClickLocation[]>([]);
-  const courtRef = useRef<HTMLDivElement>(null);
+  const courtRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,22 +31,15 @@ export default function Game() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen h-screen p-12">
-      <div
-        className="w-full h-full bg-primary relative"
-        onClick={handleClick}
-        ref={courtRef}
-      >
-        <div className="h-10 gap-8 flex bg-white">
-          <div>Game {id}</div>
-          <button
-            onClick={() => {
-              setClicks((prev) => structuredClone(prev));
-            }}
-          >
-            Click me
-          </button>
-        </div>
+    <div className="w-screen h-screen overflow-hidden bg-primary">
+      <div className="relative w-full h-full">
+        <img
+          className="bg-primary object-contain w-full max-h-screen"
+          ref={courtRef}
+          src={nbaCourtSvg}
+          onClick={handleClick}
+          draggable={false}
+        />
         {clicks.map((click, i) => {
           if (!courtRef.current) return null;
 
@@ -54,6 +49,7 @@ export default function Game() {
             left: click.x * courtRef.current.clientWidth - offset,
             top: click.y * courtRef.current.clientHeight - offset,
             pointerEvents: "none",
+            zIndex: i,
           };
 
           if (click.type === "miss") {
@@ -77,6 +73,7 @@ export default function Game() {
           );
         })}
       </div>
+      <div className="bg-primary text-white text-center">Game {id}</div>
     </div>
   );
 
