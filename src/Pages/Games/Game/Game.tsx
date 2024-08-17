@@ -56,25 +56,21 @@ export default function Game() {
             pointerEvents: "none",
           };
 
-          const baseProps = {
-            key: i,
-            style,
-          };
-
           if (click.type === "miss") {
             return (
               <img
-                {...baseProps}
+                key={i}
                 src={xSymbolSvg}
                 alt="X"
                 className="absolute"
+                style={style}
               />
             );
           }
 
           return (
             <div
-              {...baseProps}
+              key={i}
               className="absolute bg-green rounded-full"
               style={style}
             />
