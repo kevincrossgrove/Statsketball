@@ -2,10 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import xSymbolSvg from "./XSymbol.svg";
 import nbaCourtSvg from "./NBACourt.svg";
-// import nbaCourtMobile from "./NBACourtMobile.png";
+import nbaCourtMobile from "./NBACourtMobile.png";
+import ShortUniqueId from "short-unique-id";
+import useScreenSize from "@/utils/useScreenSize";
+
+const idGenerator = new ShortUniqueId();
 
 type ClickLocation = {
   type: "make" | "miss";
+  id: string;
   x: number;
   y: number;
 };
@@ -16,7 +21,10 @@ const offset = circleRadius / 2;
 export default function Game() {
   const { id } = useParams<{ id: string }>();
   const [clicks, setClicks] = useState<ClickLocation[]>([]);
+
   const courtRef = useRef<HTMLImageElement>(null);
+  const screenSize = useScreenSize();
+  const isMobile = screenSize === "xs";
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,18 +44,32 @@ export default function Game() {
         <img
           className="bg-primary object-contain w-full max-h-screen"
           ref={courtRef}
-          src={nbaCourtSvg}
+          src={isMobile ? nbaCourtMobile : nbaCourtSvg}
           onClick={handleClick}
           draggable={false}
         />
         {clicks.map((click, i) => {
           if (!courtRef.current) return null;
 
+          const courtWidth = courtRef.current.clientWidth;
+          const courtHeight = courtRef.current.clientHeight;
+
+          const screenRatio = window.innerHeight / window.innerWidth;
+          const isExtraBorder = screenRatio > 1.8;
+
+          const borderOffset = isExtraBorder ? 0 : 0;
+
+          let left = isMobile ? click.y : click.x;
+          const top = isMobile ? click.x : click.y;
+
+          left = left * courtWidth;
+          left = left - borderOffset;
+
           const style: React.CSSProperties = {
             width: circleRadius,
             height: circleRadius,
-            left: click.x * courtRef.current.clientWidth - offset,
-            top: click.y * courtRef.current.clientHeight - offset,
+            left: isMobile ? courtWidth - left - offset : left - offset,
+            top: top * courtHeight - offset,
             pointerEvents: "none",
             zIndex: i,
           };
@@ -86,8 +108,9 @@ export default function Game() {
     setClicks((prev) => [
       ...prev,
       {
-        x: xRatio,
-        y: yRatio,
+        id: idGenerator.randomUUID(),
+        x: isMobile ? yRatio : xRatio,
+        y: isMobile ? -xRatio : yRatio,
         type: prev.length % 2 === 0 ? "make" : "miss",
       },
     ]);

@@ -100,7 +100,7 @@ export default class RecordAPI<
       const idGenerator = new ShortUniqueId();
       const id = idGenerator.randomUUID();
 
-      // @ts-expect-error
+      // @ts-expect-error Annoying TS error
       const finalData: SavedT = { ...data, id };
 
       const dataString = localStorage.getItem(this.url);
