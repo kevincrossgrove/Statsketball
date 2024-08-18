@@ -1,5 +1,4 @@
 import { ClickLocation } from "@/types/GameEventTypes";
-import xSymbolSvg from "./XSymbol.svg";
 
 interface Props {
   courtRef: React.RefObject<HTMLImageElement>;
@@ -49,7 +48,9 @@ export default function ShotLocation({ courtRef, isMobile, click, i }: Props) {
   };
 
   if (click.type === "Miss") {
-    return <img src={xSymbolSvg} alt="X" className="absolute" style={style} />;
+    return (
+      <img src={"/XSymbol.svg"} alt="X" className="absolute" style={style} />
+    );
   }
 
   return <div className="absolute bg-green rounded-full" style={style} />;

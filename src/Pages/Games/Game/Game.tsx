@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useScreenSize from "@/utils/useScreenSize";
-import nbaCourtSvg from "./NBACourt.svg";
-import nbaCourtMobile from "./NBACourtMobile.png";
 import ActionsToolbar from "./ActionsToolbar";
 import { twMerge } from "tailwind-merge";
 import ShotLocation from "./ShotLocation";
 import { ClickLocation, IGameEvent } from "@/types/GameEventTypes";
+import MadeEventModal from "./GameEventModals/MadeEventModal";
 
 export default function Game() {
   const { id } = useParams<{ id: string }>();
@@ -31,40 +30,48 @@ export default function Game() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-primary relative">
-      <div className="relative w-full h-full">
-        {clickNeeded && (
-          <img
-            className={twMerge(
-              "bg-primary object-contain w-full max-h-screen",
-              newEvent?.ClickRequired &&
-                !newEvent?.ClickLocation &&
-                "animate-pulse opacity-30"
-            )}
-            ref={courtRef}
-            src={isMobile ? nbaCourtMobile : nbaCourtSvg}
-            onClick={handleClick}
-            draggable={false}
-          />
-        )}
-        {clickNeeded &&
-          clicks.map((click, i) => {
-            return (
-              <ShotLocation
-                key={click.id}
-                courtRef={courtRef}
-                isMobile={isMobile}
-                click={click}
-                i={i}
-              />
-            );
-          })}
+    <>
+      <div className="w-screen h-screen overflow-hidden bg-primary relative">
+        <div className="relative w-full h-full">
+          {clickNeeded && (
+            <img
+              className={twMerge(
+                "bg-primary object-contain w-full max-h-screen",
+                newEvent?.ClickRequired &&
+                  !newEvent?.ClickLocation &&
+                  "animate-pulse opacity-30"
+              )}
+              ref={courtRef}
+              src={isMobile ? "/NBACourtMobile.png" : "/NBACourt.svg"}
+              onClick={handleClick}
+              draggable={false}
+            />
+          )}
+          {clickNeeded &&
+            clicks.map((click, i) => {
+              return (
+                <ShotLocation
+                  key={click.id}
+                  courtRef={courtRef}
+                  isMobile={isMobile}
+                  click={click}
+                  i={i}
+                />
+              );
+            })}
+        </div>
+        <div className="bg-primary text-white text-center">Game {id}</div>
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center">
+          <ActionsToolbar newEvent={newEvent} setNewEvent={setNewEvent} />
+        </div>
       </div>
-      <div className="bg-primary text-white text-center">Game {id}</div>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-        <ActionsToolbar newEvent={newEvent} setNewEvent={setNewEvent} />
-      </div>
-    </div>
+      <MadeEventModal
+        open={newEvent?.Type === "Make" && !!newEvent?.ClickLocation}
+        onClose={() => setNewEvent(null)}
+        teams={[]}
+        defaultTeamID={newEvent?.PlayerID}
+      />
+    </>
   );
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
