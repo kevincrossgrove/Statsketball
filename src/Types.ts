@@ -38,6 +38,7 @@ export const GamePayloadSchema = z.object({
 
 export const GameSchema = GamePayloadSchema.merge(IdSchema).extend({
   GameEvents: z.array(GameEventSchema),
+  Type: z.enum(["Test"]),
 });
 
 export const DataSourcesPayloadSchemaMap = {
@@ -63,6 +64,7 @@ export type DataSources = "teams" | "games" | "players";
 export type ITeamSchema = z.infer<typeof TeamSchema>;
 export type IGameSchema = z.infer<typeof GameSchema>;
 export type IPlayerSchema = z.infer<typeof PlayerSchema>;
+export type IGameEventSchema = z.infer<typeof GameEventSchema>;
 
 export type ITeamPayloadSchema = z.infer<typeof TeamPayloadSchema>;
 export type IGamePayloadSchema = z.infer<typeof GamePayloadSchema>;

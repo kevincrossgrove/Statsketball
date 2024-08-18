@@ -42,7 +42,17 @@ const AppRouter = createBrowserRouter([
   },
 ]);
 
-// GameEvent - 2 points, 3 points, O Rebound, D Rebound, Assist, Steal, Turnover, Foul, Foul Shot
+// GameEvents
+// 2 points, 3 points, O Rebound, D Rebound, Assist, Steal, Turnover,
+// Foul Shot, Block, Jump Ball, Shot Clock Violation
+// Technical Foul, Flagrant Foul, Personal Foul
+// Timeout, Injury Timeout
+
+// Made shot by player, assisted by player
+// Missed shot by player, blocked by player
+// Made shot by player, fouled by player
+// Made/missed foul shot by player
+// Shooting foul by player
 function App() {
   return (
     <>
