@@ -1,4 +1,4 @@
-import { DataSources, DataSourcesPayloadSchemaMap } from "../Types";
+import { DataSources, DataSourcesPayloadSchemaMap } from "../types/Types";
 
 export function ValidateItem<T>(dataSource: DataSources, data: T) {
   const schema = DataSourcesPayloadSchemaMap[dataSource];

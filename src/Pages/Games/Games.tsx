@@ -1,4 +1,4 @@
-import { IGameSchema } from "../../Types";
+import { IGameSchema } from "../../types/Types";
 import useItems from "../../utils/useItems";
 import AppHeader from "../../components/AppHeader";
 import AppBasicTable from "../../components/AppBasicTable";

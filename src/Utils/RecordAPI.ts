@@ -2,7 +2,7 @@ import {
   DataSourcePayloadSchema,
   DataSources,
   DataSourceSchema,
-} from "../Types";
+} from "../types/Types";
 import API from "./API";
 import ShortUniqueId from "short-unique-id";
 

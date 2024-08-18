@@ -1,4 +1,4 @@
-import { IPlayerSchema } from "../../Types";
+import { IPlayerSchema } from "../../types/Types";
 import useItems from "../../utils/useItems";
 import AppHeader from "../../components/AppHeader";
 import AppBasicTable from "../../components/AppBasicTable";

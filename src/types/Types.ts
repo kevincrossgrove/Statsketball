@@ -1,11 +1,8 @@
 import { z } from "zod";
+import { BaseGameEventSchema } from "./GameEventTypes";
 
 const IdSchema = z.object({
   id: z.string(),
-});
-
-export const GameEventSchema = z.object({
-  PlayerID: z.string(),
 });
 
 const PlayerPayloadSchema = z.object({
@@ -37,8 +34,7 @@ export const GamePayloadSchema = z.object({
 });
 
 export const GameSchema = GamePayloadSchema.merge(IdSchema).extend({
-  GameEvents: z.array(GameEventSchema),
-  Type: z.enum(["Test"]),
+  GameEvents: z.array(BaseGameEventSchema),
 });
 
 export const DataSourcesPayloadSchemaMap = {
@@ -64,7 +60,7 @@ export type DataSources = "teams" | "games" | "players";
 export type ITeamSchema = z.infer<typeof TeamSchema>;
 export type IGameSchema = z.infer<typeof GameSchema>;
 export type IPlayerSchema = z.infer<typeof PlayerSchema>;
-export type IGameEventSchema = z.infer<typeof GameEventSchema>;
+export type IGameEventSchema = z.infer<typeof BaseGameEventSchema>;
 
 export type ITeamPayloadSchema = z.infer<typeof TeamPayloadSchema>;
 export type IGamePayloadSchema = z.infer<typeof GamePayloadSchema>;

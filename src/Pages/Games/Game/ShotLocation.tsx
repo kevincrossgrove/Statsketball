@@ -1,11 +1,5 @@
+import { ClickLocation } from "@/types/GameEventTypes";
 import xSymbolSvg from "./XSymbol.svg";
-
-export type ClickLocation = {
-  type: "make" | "miss" | "pending";
-  id: string;
-  x: number;
-  y: number;
-};
 
 interface Props {
   courtRef: React.RefObject<HTMLImageElement>;
@@ -54,25 +48,7 @@ export default function ShotLocation({ courtRef, isMobile, click, i }: Props) {
     zIndex: i,
   };
 
-  if (click.type === "pending") {
-    return (
-      <img
-        src={"/basketball.webp"}
-        alt=""
-        className="absolute animate-pulse"
-        style={style}
-      />
-    );
-  }
-
-  // return (
-  //   <div
-  //     className="rounded-full bg-white absolute animate-pulse"
-  //     style={style}
-  //   ></div>
-  // );
-
-  if (click.type === "miss") {
+  if (click.type === "Miss") {
     return <img src={xSymbolSvg} alt="X" className="absolute" style={style} />;
   }
 
