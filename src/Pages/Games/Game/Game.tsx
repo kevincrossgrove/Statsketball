@@ -54,16 +54,27 @@ export default function Game() {
           const courtWidth = courtRef.current.clientWidth;
           const courtHeight = courtRef.current.clientHeight;
 
-          const screenRatio = window.innerHeight / window.innerWidth;
-          const isExtraBorder = screenRatio > 1.8;
+          // const courtRatio = 1.8;
+          // const screenRatio = window.innerHeight / window.innerWidth;
+          // const isExtraBorder = screenRatio < courtRatio;
 
-          const borderOffset = isExtraBorder ? 0 : 0;
+          // height of the screen divided by the screen ratio
+          // subract
+          // height of the screen divided by court ratio
+          // divide by 2
+
+          // const cH = window.innerHeight / screenRatio;
+          // const oH = window.innerHeight / courtRatio;
+          // const difference = cH - oH;
+
+          // const borderOffset = isExtraBorder ? difference / 6 : 0;
+
+          // console.log(borderOffset);
 
           let left = isMobile ? click.y : click.x;
           const top = isMobile ? click.x : click.y;
 
           left = left * courtWidth;
-          left = left - borderOffset;
 
           const style: React.CSSProperties = {
             width: circleRadius,
@@ -110,7 +121,7 @@ export default function Game() {
       {
         id: idGenerator.randomUUID(),
         x: isMobile ? yRatio : xRatio,
-        y: isMobile ? -xRatio : yRatio,
+        y: isMobile ? 1 - xRatio : yRatio,
         type: prev.length % 2 === 0 ? "make" : "miss",
       },
     ]);
