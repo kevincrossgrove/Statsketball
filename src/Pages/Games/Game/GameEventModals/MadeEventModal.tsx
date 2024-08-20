@@ -1,11 +1,18 @@
 import AppModal, { ModalProps } from "@/components/AppModal";
-import { ITeamSchema } from "@/types/Types";
+import { IGameEvent } from "@/types/GameEventTypes";
+import { IPlayerSchema, ITeamSchema } from "@/types/Types";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props extends ModalProps {
   teams: ITeamSchema[];
   defaultTeamID?: string;
+  defaultPoints?: "2" | "3";
+  playersMap: Record<string, IPlayerSchema>;
+  newEvent: Partial<IGameEvent> | null;
+  setNewEvent: React.Dispatch<
+    React.SetStateAction<Partial<Partial<IGameEvent> | null>>
+  >;
 }
 
 const pageTitles = ["Who made the shot?", "Who assisted the shot?"];
@@ -15,14 +22,21 @@ export default function MadeEventModal({
   onClose,
   teams,
   defaultTeamID,
+  defaultPoints,
+  playersMap,
+  newEvent,
+  setNewEvent,
 }: Props) {
   const [page, setPage] = useState(0);
   const [selectedTeamID, setSelectedTeamID] = useState(defaultTeamID);
+  const [selectedPoints, setSelectedPoints] = useState(defaultPoints);
 
-  const selectedTeam = teams.find((team) => team.id === defaultTeamID);
+  const selectedTeam = teams.find((team) => team.id === selectedTeamID);
+
+  console.log(selectedTeam, teams, selectedTeamID);
 
   return (
-    <AppModal open={open} onClose={onClose} title={pageTitles[page]}>
+    <AppModal open={open} onClose={handleClose} title={pageTitles[page]}>
       {page === 0 && (
         <div>
           <TeamSelector
@@ -30,18 +44,73 @@ export default function MadeEventModal({
             selectedTeamID={selectedTeamID || teams?.[0]?.id}
             setSelectedTeamID={setSelectedTeamID}
           />
-          {selectedTeam?.Players?.map((player) => (
-            <div onClick={() => selectShotMaker(player)}>{player}</div>
-          ))}
+          <PlayerSelector
+            players={selectedTeam?.Players || []}
+            playersMap={playersMap}
+            onSelectPlayer={selectShotMaker}
+          />
+          <PointsSelector
+            selectedPoints={selectedPoints}
+            setSelectedPoints={setSelectedPoints}
+          />
         </div>
       )}
-      {page === 1 && <div>Team's Player List Again</div>}
+      {page === 1 && (
+        <div>
+          <div className="flex justify-between">
+            <TeamSelector
+              teams={teams.filter((team) => team.id === selectedTeamID)}
+              selectedTeamID={selectedTeamID || teams?.[0]?.id}
+              setSelectedTeamID={setSelectedTeamID}
+            />
+            <div
+              className="font-bold cursor-pointer"
+              onClick={() => setPage(2)}
+            >
+              Skip
+            </div>
+          </div>
+          <PlayerSelector
+            players={
+              selectedTeam?.Players?.filter((p) => p !== newEvent?.PlayerID) ||
+              []
+            }
+            playersMap={playersMap}
+            onSelectPlayer={selectAssistor}
+          />
+        </div>
+      )}
+      {page === 2 && <div>Doneski!</div>}
     </AppModal>
   );
 
+  function handleClose() {
+    setPage(0);
+    onClose();
+  }
+
   function selectShotMaker(playerID: string) {
-    console.log(playerID);
+    setNewEvent((prev) => {
+      if (!prev || prev.Type !== "Make") return null;
+
+      return {
+        ...prev,
+        PlayerID: playerID,
+      };
+    });
     setPage(1);
+  }
+
+  function selectAssistor(playerID: string) {
+    setNewEvent((prev) => {
+      if (!prev || prev.Type !== "Make") return null;
+
+      return {
+        ...prev,
+        AssistedBy: playerID,
+      };
+    });
+    setPage(2);
   }
 }
 
@@ -57,16 +126,91 @@ function TeamSelector({
   setSelectedTeamID,
 }: TeamSelectorProps) {
   return (
-    <>
+    <div className="flex mb-4 gap-2">
       {teams.map((team) => (
         <div
           key={team.id}
-          className={twMerge("", selectedTeamID === team.id && "")}
+          className={twMerge(
+            "cursor-pointer",
+            selectedTeamID === team.id && "text-green font-bold"
+          )}
           onClick={() => setSelectedTeamID(team.id)}
         >
           {team.Name}
         </div>
       ))}
-    </>
+    </div>
+  );
+}
+
+interface PlayerSelectorProps {
+  players: string[];
+  playersMap: Record<string, IPlayerSchema>;
+  onSelectPlayer: (playerID: string) => void;
+}
+
+function PlayerSelector({
+  players,
+  playersMap,
+  onSelectPlayer,
+}: PlayerSelectorProps) {
+  if (!Array.isArray(players) || players.length === 0) return null;
+
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {players.map((playerID) => {
+        const player = playersMap[playerID];
+
+        if (!player) return null;
+
+        return (
+          <div
+            key={playerID}
+            onClick={() => onSelectPlayer(playerID)}
+            className="border p-4 rounded-sm cursor-pointer shadow-sm hover:bg-muted"
+          >
+            {player?.Name}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+interface PointsSelectorProps {
+  selectedPoints: "2" | "3" | undefined;
+  setSelectedPoints: (points: "2" | "3") => void;
+}
+
+function PointsSelector({
+  selectedPoints,
+  setSelectedPoints,
+}: PointsSelectorProps) {
+  return (
+    <div className="mt-4">
+      <div className="text-md font-bold mb-3">Points</div>
+      <div className="flex gap-2 flex-wrap">
+        <div
+          className={twMerge(
+            "border px-5 py-2 rounded-sm cursor-pointer shadow-sm hover:bg-muted",
+            selectedPoints === "2" &&
+              "bg-green text-white hover:bg-green-700 hover:text-white"
+          )}
+          onClick={() => setSelectedPoints(selectedPoints === "2" ? "3" : "2")}
+        >
+          2
+        </div>
+        <div
+          className={twMerge(
+            "border px-5 py-2 rounded-sm cursor-pointer shadow-sm hover:bg-muted",
+            selectedPoints === "3" &&
+              "bg-green text-white hover:bg-green-700 hover:text-white"
+          )}
+          onClick={() => setSelectedPoints(selectedPoints === "3" ? "2" : "3")}
+        >
+          3
+        </div>
+      </div>
+    </div>
   );
 }

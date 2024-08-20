@@ -1,15 +1,23 @@
 import { IGameSchema, IPlayerSchema, ITeamSchema } from "@/types/Types";
 
+export type GameInfo = {
+  game: IGameSchema;
+  teams: ITeamSchema[];
+  playersMap: Record<string, IPlayerSchema>;
+};
+
 // For Game Specific API calls, that aren't covered by RecordAPI
 export default class GameAPI {
-  static async FetchGameTeamsAndPlayers(gameID: string) {
+  static async FetchGameTeamsAndPlayers(
+    gameID: string
+  ): Promise<GameInfo | null> {
     // This logic will be server side in the future
     // For now, we'll just use our localStorage setup.
 
     // ----------- Game Fetching -----------
     const gamesString = localStorage.getItem("games");
 
-    if (!gamesString) return [];
+    if (!gamesString) return null;
 
     const games: IGameSchema[] = JSON.parse(gamesString);
 
@@ -20,7 +28,7 @@ export default class GameAPI {
     // ----------- Teams Fetching -----------
     const teamsString = localStorage.getItem("teams");
 
-    if (!teamsString) return [];
+    if (!teamsString) return null;
 
     const allTeams: ITeamSchema[] = JSON.parse(teamsString);
 
@@ -31,7 +39,7 @@ export default class GameAPI {
     // ----------- Players Fetching -----------
     const playersString = localStorage.getItem("players");
 
-    if (!playersString) return [];
+    if (!playersString) return null;
 
     const allPlayers: IPlayerSchema[] = JSON.parse(playersString);
 

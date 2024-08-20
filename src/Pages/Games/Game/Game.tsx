@@ -6,11 +6,19 @@ import { twMerge } from "tailwind-merge";
 import ShotLocation from "./ShotLocation";
 import { ClickLocation, IGameEvent } from "@/types/GameEventTypes";
 import MadeEventModal from "./GameEventModals/MadeEventModal";
+import useGameInfo from "./useGameInfo";
+
+// The X and Y coordinates of the hoop
+const hoopX = 0.0425531914894;
+const hoopY = 0.5;
+const courtRatio = 94 / 50;
 
 export default function Game() {
   const { id } = useParams<{ id: string }>();
   const [clicks, setClicks] = useState<ClickLocation[]>([]);
   const [newEvent, setNewEvent] = useState<Partial<IGameEvent> | null>(null);
+
+  const { game, teams, playersMap } = useGameInfo(id);
 
   const courtRef = useRef<HTMLImageElement>(null);
   const screenSize = useScreenSize();
@@ -66,10 +74,15 @@ export default function Game() {
         </div>
       </div>
       <MadeEventModal
+        key={teams?.[0]?.id}
         open={newEvent?.Type === "Make" && !!newEvent?.ClickLocation}
         onClose={() => setNewEvent(null)}
-        teams={[]}
-        defaultTeamID={newEvent?.PlayerID}
+        teams={teams || []}
+        defaultTeamID={teams?.[0]?.id}
+        playersMap={playersMap || {}}
+        newEvent={newEvent}
+        setNewEvent={setNewEvent}
+        defaultPoints={newEvent?.Type === "Make" ? newEvent?.Points : undefined}
       />
     </>
   );
@@ -88,11 +101,20 @@ export default function Game() {
     const xRatio = e.nativeEvent.offsetX / courtRef.current.clientWidth;
     const yRatio = e.nativeEvent.offsetY / courtRef.current.clientHeight;
 
+    const xRatioWarped = xRatio * courtRatio;
+
+    const X2minusX1Squared = Math.pow(xRatioWarped - hoopX, 2);
+    const Y2minusY1Squared = Math.pow(yRatio - hoopY, 2);
+
+    const hypotenuse = Math.sqrt(X2minusX1Squared + Y2minusY1Squared);
+
+    console.log({ game, hypotenuse });
+
     const clickLocation: ClickLocation = {
       id: eventID,
       x: isMobile ? yRatio : xRatio,
       y: isMobile ? 1 - xRatio : yRatio,
-      type: newEvent.Type === "Make" ? "Make" : "Miss",
+      type: newEvent?.Type === "Make" ? "Make" : "Miss",
     };
 
     setNewEvent((prev) => ({ ...prev, ClickLocation: clickLocation }));
