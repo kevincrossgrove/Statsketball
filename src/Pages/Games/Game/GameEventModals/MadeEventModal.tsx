@@ -33,8 +33,6 @@ export default function MadeEventModal({
 
   const selectedTeam = teams.find((team) => team.id === selectedTeamID);
 
-  console.log(selectedTeam, teams, selectedTeamID);
-
   return (
     <AppModal open={open} onClose={handleClose} title={pageTitles[page]}>
       {page === 0 && (

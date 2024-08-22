@@ -7,10 +7,17 @@ const idGenerator = new ShortUniqueId();
 interface Props {
   newEvent: Partial<IGameEvent> | null;
   setNewEvent: (event: Partial<IGameEvent> | null) => void;
+  teamID: string | null;
+  setSelectedTeamID: (teamID: string | null) => void;
 }
 
 // Component for adding Game Events to the Game
-export default function ActionsToolbar({ newEvent, setNewEvent }: Props) {
+export default function ActionsToolbar({
+  newEvent,
+  setNewEvent,
+  teamID,
+  setSelectedTeamID,
+}: Props) {
   const isAddingEvent = newEvent !== null;
 
   const Actions = isAddingEvent ? null : (
@@ -25,6 +32,7 @@ export default function ActionsToolbar({ newEvent, setNewEvent }: Props) {
       <ActionButton
         title="Cancel"
         onClick={() => {
+          setSelectedTeamID(null);
           setNewEvent(null);
         }}
       />
@@ -39,6 +47,7 @@ export default function ActionsToolbar({ newEvent, setNewEvent }: Props) {
   );
 
   function newMakeEvent() {
+    setSelectedTeamID(teamID);
     setNewEvent({
       id: idGenerator.randomUUID(),
       Type: "Make",
@@ -47,6 +56,7 @@ export default function ActionsToolbar({ newEvent, setNewEvent }: Props) {
   }
 
   function newMissEvent() {
+    setSelectedTeamID(teamID);
     setNewEvent({
       id: idGenerator.randomUUID(),
       Type: "Miss",

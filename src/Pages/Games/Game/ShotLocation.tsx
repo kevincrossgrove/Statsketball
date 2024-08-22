@@ -1,7 +1,7 @@
 import { ClickLocation } from "@/types/GameEventTypes";
 
 interface Props {
-  courtRef: React.RefObject<HTMLImageElement>;
+  courtRef: HTMLImageElement | null;
   isMobile: boolean;
   click: ClickLocation;
   i: number;
@@ -11,10 +11,10 @@ const circleRadius = 10;
 const offset = circleRadius / 2;
 
 export default function ShotLocation({ courtRef, isMobile, click, i }: Props) {
-  if (!courtRef.current) return null;
+  if (!courtRef) return null;
 
-  const courtWidth = courtRef.current.clientWidth;
-  const courtHeight = courtRef.current.clientHeight;
+  const courtWidth = courtRef.clientWidth;
+  const courtHeight = courtRef.clientHeight;
 
   // const courtRatio = 1.8;
   // const screenRatio = window.innerHeight / window.innerWidth;

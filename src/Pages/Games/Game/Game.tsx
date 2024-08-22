@@ -8,9 +8,14 @@ import { ClickLocation, IGameEvent } from "@/types/GameEventTypes";
 import MadeEventModal from "./GameEventModals/MadeEventModal";
 import useGameInfo from "./useGameInfo";
 
-// The X and Y coordinates of the hoop
-const hoopX = 0.0425531914894;
-const hoopY = 0.5;
+// The X and Y coordinates of the left hoop
+const leftHoopX = 0.0425531914894;
+const leftHoopY = 0.5;
+
+// The X and Y coordinates of the right hoop
+const rightHoopX = 0.9574468085106;
+const rightHoopY = 0.5;
+
 const courtRatio = 94 / 50;
 
 export default function Game() {
@@ -18,13 +23,38 @@ export default function Game() {
   const [clicks, setClicks] = useState<ClickLocation[]>([]);
   const [newEvent, setNewEvent] = useState<Partial<IGameEvent> | null>(null);
 
+  // Saved game info from the Database
   const { game, teams, playersMap } = useGameInfo(id);
 
-  const courtRef = useRef<HTMLImageElement>(null);
+  // TODO: Move these to a useReducer
+  const [selectedTeamID, setSelectedTeamID] = useState<string | null>(null);
+  const [leftTeamID, setLeftTeamID] = useState<string | null>(null);
+  const [rightTeamID, setRightTeamID] = useState<string | null>(null);
+
+  const [courtRef, setCourtRef] = useState<HTMLImageElement | null>(null);
+  const [isCourtReady, setIsCourtReady] = useState(false);
+
   const screenSize = useScreenSize();
   const isMobile = screenSize === "xs";
   const clickNeeded = newEvent?.ClickRequired;
 
+  const leftTeamIdRef = useRef<string | null>(null);
+  const rightTeamIdRef = useRef<string | null>(null);
+
+  leftTeamIdRef.current = leftTeamID;
+  rightTeamIdRef.current = rightTeamID;
+
+  // Setups leftTeam / rightTeam when none has been set yet.
+  useEffect(() => {
+    if (leftTeamIdRef.current || rightTeamIdRef.current) return;
+
+    if (!teams?.length) return;
+
+    setLeftTeamID(teams?.[0]?.id);
+    setRightTeamID(teams?.[1]?.id);
+  }, [teams]);
+
+  // Forces rerender of clicks when the screen is being resized
   useEffect(() => {
     const handleResize = () => {
       setClicks((prev) => structuredClone(prev));
@@ -49,7 +79,10 @@ export default function Game() {
                   !newEvent?.ClickLocation &&
                   "animate-pulse opacity-30"
               )}
-              ref={courtRef}
+              ref={(node) => {
+                setCourtRef(node);
+                setTimeout(() => setIsCourtReady(!!node));
+              }}
               src={isMobile ? "/NBACourtMobile.png" : "/NBACourt.svg"}
               onClick={handleClick}
               draggable={false}
@@ -67,10 +100,54 @@ export default function Game() {
                 />
               );
             })}
+
+          {/* Left Hoop Marker */}
+          {clickNeeded && isCourtReady && selectedTeamID === leftTeamID && (
+            <ShotLocation
+              courtRef={courtRef}
+              isMobile={isMobile}
+              click={{
+                id: "Left Basketball Hoop",
+                x: leftHoopX,
+                y: leftHoopY,
+                type: "Miss",
+              }}
+              i={100}
+            />
+          )}
+          {/* Right Hoop Marker */}
+          {clickNeeded && isCourtReady && selectedTeamID === rightTeamID && (
+            <>
+              <ShotLocation
+                courtRef={courtRef}
+                isMobile={isMobile}
+                click={{
+                  id: "Right Basketball Hoop",
+                  x: rightHoopX,
+                  y: rightHoopY,
+                  type: "Miss",
+                }}
+                i={100}
+              />
+            </>
+          )}
         </div>
         <div className="bg-primary text-white text-center">Game {id}</div>
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-          <ActionsToolbar newEvent={newEvent} setNewEvent={setNewEvent} />
+        <div className="absolute bottom-0 left-0 flex justify-center">
+          <ActionsToolbar
+            newEvent={newEvent}
+            setNewEvent={setNewEvent}
+            teamID={leftTeamID}
+            setSelectedTeamID={setSelectedTeamID}
+          />
+        </div>
+        <div className="absolute bottom-0 right-0 flex justify-center">
+          <ActionsToolbar
+            newEvent={newEvent}
+            setNewEvent={setNewEvent}
+            teamID={rightTeamID}
+            setSelectedTeamID={setSelectedTeamID}
+          />
         </div>
       </div>
       <MadeEventModal
@@ -94,14 +171,17 @@ export default function Game() {
 
     // Ignore clicks when a click is not required for this event,
     // or the event already has a location
-    if (!courtRef.current || !cRequired || cLocation || !eventID) {
+    if (!courtRef || !cRequired || cLocation || !eventID) {
       return;
     }
 
-    const xRatio = e.nativeEvent.offsetX / courtRef.current.clientWidth;
-    const yRatio = e.nativeEvent.offsetY / courtRef.current.clientHeight;
+    const xRatio = e.nativeEvent.offsetX / courtRef.clientWidth;
+    const yRatio = e.nativeEvent.offsetY / courtRef.clientHeight;
 
     const xRatioWarped = xRatio * courtRatio;
+
+    const hoopX = leftTeamID === selectedTeamID ? leftHoopX : rightHoopX;
+    const hoopY = leftTeamID === selectedTeamID ? leftHoopY : rightHoopY;
 
     const X2minusX1Squared = Math.pow(xRatioWarped - hoopX, 2);
     const Y2minusY1Squared = Math.pow(yRatio - hoopY, 2);
