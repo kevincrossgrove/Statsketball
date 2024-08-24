@@ -1,7 +1,7 @@
 import AppModal, { ModalProps } from "@/components/AppModal";
 import { IGameEvent } from "@/types/GameEventTypes";
 import { IPlayerSchema, ITeamSchema } from "@/types/Types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props extends ModalProps {
@@ -33,6 +33,10 @@ export default function MadeEventModal({
 
   const selectedTeam = teams.find((team) => team.id === selectedTeamID);
 
+  useEffect(() => {
+    setSelectedPoints(defaultPoints);
+  }, [defaultPoints]);
+
   return (
     <AppModal open={open} onClose={handleClose} title={pageTitles[page]}>
       {page === 0 && (
@@ -61,12 +65,6 @@ export default function MadeEventModal({
               selectedTeamID={selectedTeamID || teams?.[0]?.id}
               setSelectedTeamID={setSelectedTeamID}
             />
-            <div
-              className="font-bold cursor-pointer"
-              onClick={() => setPage(2)}
-            >
-              Skip
-            </div>
           </div>
           <PlayerSelector
             players={
@@ -75,6 +73,7 @@ export default function MadeEventModal({
             }
             playersMap={playersMap}
             onSelectPlayer={selectAssistor}
+            onSkip={() => setPage(2)}
           />
         </div>
       )}
@@ -145,12 +144,14 @@ interface PlayerSelectorProps {
   players: string[];
   playersMap: Record<string, IPlayerSchema>;
   onSelectPlayer: (playerID: string) => void;
+  onSkip?: () => void;
 }
 
 function PlayerSelector({
   players,
   playersMap,
   onSelectPlayer,
+  onSkip,
 }: PlayerSelectorProps) {
   if (!Array.isArray(players) || players.length === 0) return null;
 
@@ -171,6 +172,14 @@ function PlayerSelector({
           </div>
         );
       })}
+      {onSkip && (
+        <div
+          className="border p-4 rounded-sm bg-black text-white cursor-pointer shadow-sm"
+          onClick={onSkip}
+        >
+          Nobody
+        </div>
+      )}
     </div>
   );
 }

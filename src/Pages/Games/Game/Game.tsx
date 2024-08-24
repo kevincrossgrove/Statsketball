@@ -9,11 +9,11 @@ import MadeEventModal from "./GameEventModals/MadeEventModal";
 import useGameInfo from "./useGameInfo";
 
 // The X and Y coordinates of the left hoop
-const leftHoopX = 0.0425531914894;
+const leftHoopX = 0.08;
 const leftHoopY = 0.5;
 
 // The X and Y coordinates of the right hoop
-const rightHoopX = 0.9574468085106;
+const rightHoopX = 1.8;
 const rightHoopY = 0.5;
 
 const courtRatio = 94 / 50;
@@ -25,6 +25,8 @@ export default function Game() {
 
   // Saved game info from the Database
   const { game, teams, playersMap } = useGameInfo(id);
+
+  console.log(game);
 
   // TODO: Move these to a useReducer
   const [selectedTeamID, setSelectedTeamID] = useState<string | null>(null);
@@ -108,7 +110,7 @@ export default function Game() {
               isMobile={isMobile}
               click={{
                 id: "Left Basketball Hoop",
-                x: leftHoopX,
+                x: leftHoopX / courtRatio,
                 y: leftHoopY,
                 type: "Miss",
               }}
@@ -123,7 +125,7 @@ export default function Game() {
                 isMobile={isMobile}
                 click={{
                   id: "Right Basketball Hoop",
-                  x: rightHoopX,
+                  x: rightHoopX / courtRatio,
                   y: rightHoopY,
                   type: "Miss",
                 }}
@@ -180,15 +182,28 @@ export default function Game() {
 
     const xRatioWarped = xRatio * courtRatio;
 
-    const hoopX = leftTeamID === selectedTeamID ? leftHoopX : rightHoopX;
-    const hoopY = leftTeamID === selectedTeamID ? leftHoopY : rightHoopY;
+    const isLeftHoop = leftTeamID === selectedTeamID;
+
+    const hoopX = isLeftHoop ? leftHoopX : rightHoopX;
+    const hoopY = isLeftHoop ? leftHoopY : rightHoopY;
 
     const X2minusX1Squared = Math.pow(xRatioWarped - hoopX, 2);
     const Y2minusY1Squared = Math.pow(yRatio - hoopY, 2);
 
     const hypotenuse = Math.sqrt(X2minusX1Squared + Y2minusY1Squared);
 
-    console.log({ game, hypotenuse });
+    let points: "2" | "3" = "2";
+
+    // Determining if the shot was a 3 pointer or not based on the hypotenuse
+    if (hypotenuse > 0.49) {
+      points = "3";
+    } else if (
+      hypotenuse > 0.44 && isLeftHoop ? xRatio < 0.164 : xRatio > 0.836
+    ) {
+      points = "3";
+    } else {
+      points = "2";
+    }
 
     const clickLocation: ClickLocation = {
       id: eventID,
@@ -197,7 +212,13 @@ export default function Game() {
       type: newEvent?.Type === "Make" ? "Make" : "Miss",
     };
 
-    setNewEvent((prev) => ({ ...prev, ClickLocation: clickLocation }));
+    setNewEvent((prev) => {
+      return {
+        ...prev,
+        ClickLocation: clickLocation,
+        Points: points,
+      };
+    });
     setClicks((prev) => [...prev, clickLocation]);
   }
 }

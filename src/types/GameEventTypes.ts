@@ -27,7 +27,7 @@ const MakeEventSchema = z.object({
 const MissEventSchema = z.object({
   Type: z.literal("Miss"),
   PlayerID: z.string(),
-  AttemptedPoints: z.enum(["2", "3"]),
+  Points: z.enum(["2", "3"]),
   BlockedBy: z.string().optional(),
 });
 
