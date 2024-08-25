@@ -1,13 +1,14 @@
 import ActionButton from "./ActionButton";
 import ShortUniqueId from "short-unique-id";
 import { IGameEvent } from "@/types/GameEventTypes";
+import { ITeamSchema } from "@/types/Types";
 
 const idGenerator = new ShortUniqueId();
 
 interface Props {
   newEvent: Partial<IGameEvent> | null;
   setNewEvent: (event: Partial<IGameEvent> | null) => void;
-  teamID: string | null;
+  team: ITeamSchema | null;
   setSelectedTeamID: (teamID: string | null) => void;
 }
 
@@ -15,10 +16,11 @@ interface Props {
 export default function ActionsToolbar({
   newEvent,
   setNewEvent,
-  teamID,
+  team,
   setSelectedTeamID,
 }: Props) {
   const isAddingEvent = newEvent !== null;
+  const teamID = team?.id || null;
 
   const Actions = isAddingEvent ? null : (
     <>
@@ -40,9 +42,12 @@ export default function ActionsToolbar({
   );
 
   return (
-    <div className="bg-green p-2 min-w-64 flex gap-3">
-      {Actions}
-      {CancelOptions}
+    <div className="text-white bg-green px-2 py-1 rounded">
+      {team?.Name}
+      <div className="bg-green min-w-64 py-2 flex gap-3">
+        {Actions}
+        {CancelOptions}
+      </div>
     </div>
   );
 

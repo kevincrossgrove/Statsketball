@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useScreenSize from "@/utils/useScreenSize";
 import ActionsToolbar from "./ActionsToolbar";
@@ -46,7 +46,17 @@ export default function Game() {
   leftTeamIdRef.current = leftTeamID;
   rightTeamIdRef.current = rightTeamID;
 
-  // Setups leftTeam / rightTeam when none has been set yet.
+  const leftTeam = useMemo(
+    () => teams?.find((team) => team.id === leftTeamID),
+    [teams, leftTeamID]
+  );
+
+  const rightTeam = useMemo(
+    () => teams?.find((team) => team.id === rightTeamID),
+    [teams, rightTeamID]
+  );
+
+  // Setup for leftTeam / rightTeam when none has been set yet.
   useEffect(() => {
     if (leftTeamIdRef.current || rightTeamIdRef.current) return;
 
@@ -139,7 +149,7 @@ export default function Game() {
           <ActionsToolbar
             newEvent={newEvent}
             setNewEvent={setNewEvent}
-            teamID={leftTeamID}
+            team={leftTeam || null}
             setSelectedTeamID={setSelectedTeamID}
           />
         </div>
@@ -147,7 +157,7 @@ export default function Game() {
           <ActionsToolbar
             newEvent={newEvent}
             setNewEvent={setNewEvent}
-            teamID={rightTeamID}
+            team={rightTeam || null}
             setSelectedTeamID={setSelectedTeamID}
           />
         </div>
@@ -157,7 +167,7 @@ export default function Game() {
         open={newEvent?.Type === "Make" && !!newEvent?.ClickLocation}
         onClose={() => setNewEvent(null)}
         teams={teams || []}
-        defaultTeamID={teams?.[0]?.id}
+        defaultTeamID={selectedTeamID}
         playersMap={playersMap || {}}
         newEvent={newEvent}
         setNewEvent={setNewEvent}
@@ -197,9 +207,9 @@ export default function Game() {
     // Determining if the shot was a 3 pointer or not based on the hypotenuse
     if (hypotenuse > 0.49) {
       points = "3";
-    } else if (
-      hypotenuse > 0.44 && isLeftHoop ? xRatio < 0.164 : xRatio > 0.836
-    ) {
+    } else if (isLeftHoop && xRatio < 0.164 && hypotenuse > 0.44) {
+      points = "3";
+    } else if (!isLeftHoop && xRatio > 0.836 && hypotenuse > 0.44) {
       points = "3";
     } else {
       points = "2";

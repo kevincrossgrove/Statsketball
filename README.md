@@ -7,3 +7,12 @@
 - Ability to share a game as a link for others to see (paid feature?)
 - Ability to share a game as a live link for other to see (realtime paid feature)
 - Location input with google maps autocomplete
+
+### In Progress
+
+- Saving game events
+- Ability to switch sides of the court (swap teams / hoops)
+- MissEventModal Implementation
+- Toast Event for successful game event creation(s)
+- Game Event Feed (no animations yet)
+- Ability to select team colors, potentially even home/away colors
