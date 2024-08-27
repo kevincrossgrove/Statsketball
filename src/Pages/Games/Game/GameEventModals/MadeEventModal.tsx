@@ -4,6 +4,7 @@ import { IPlayerSchema, ITeamSchema } from "@/types/Types";
 import { useEffect, useState } from "react";
 import PlayerSelector from "./PlayerSelector";
 import PointsSelector from "./PointsSelector";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Props extends ModalProps {
   teams: ITeamSchema[];
@@ -28,6 +29,7 @@ export default function MadeEventModal({
   newEvent,
   setNewEvent,
 }: Props) {
+  const { toast } = useToast();
   const [page, setPage] = useState(0);
   const [selectedPoints, setSelectedPoints] = useState(defaultPoints);
 
@@ -92,6 +94,11 @@ export default function MadeEventModal({
     };
 
     // Save Event, show toast
+    toast({
+      title: "Event Saved",
+      description: "Made shot saved successfully",
+      duration: 1750,
+    });
 
     handleClose();
   }
