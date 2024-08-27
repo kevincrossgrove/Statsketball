@@ -7,6 +7,7 @@ import ShotLocation from "./ShotLocation";
 import { ClickLocation, IGameEvent } from "@/types/GameEventTypes";
 import MadeEventModal from "./GameEventModals/MadeEventModal";
 import useGameInfo from "./useGameInfo";
+import MissEventModal from "./GameEventModals/MissEventModal";
 
 // The X and Y coordinates of the left hoop
 const leftHoopX = 0.08;
@@ -55,6 +56,13 @@ export default function Game() {
     () => teams?.find((team) => team.id === rightTeamID),
     [teams, rightTeamID]
   );
+
+  // The team that is NOT selected.
+  const otherTeamID = useMemo(() => {
+    if (!teams?.length) return null;
+
+    return teams?.find((team) => team.id !== selectedTeamID)?.id;
+  }, [teams, selectedTeamID]);
 
   // Setup for leftTeam / rightTeam when none has been set yet.
   useEffect(() => {
@@ -172,6 +180,17 @@ export default function Game() {
         newEvent={newEvent}
         setNewEvent={setNewEvent}
         defaultPoints={newEvent?.Type === "Make" ? newEvent?.Points : undefined}
+      />
+      <MissEventModal
+        open={newEvent?.Type === "Miss" && !!newEvent?.ClickLocation}
+        onClose={() => setNewEvent(null)}
+        teams={teams || []}
+        defaultTeamID={selectedTeamID}
+        otherTeamID={otherTeamID}
+        playersMap={playersMap || {}}
+        newEvent={newEvent}
+        setNewEvent={setNewEvent}
+        defaultPoints={newEvent?.Type === "Miss" ? newEvent?.Points : undefined}
       />
     </>
   );
