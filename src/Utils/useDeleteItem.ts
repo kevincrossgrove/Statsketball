@@ -1,8 +1,8 @@
-import { DataSources, DataSourceSchema } from "@/Types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import RecordAPI from "./RecordAPI";
 import { useState } from "react";
+import { DataSources, DataSourceSchema } from "@/types/Types";
 
 interface MutationProps {
   id: string;

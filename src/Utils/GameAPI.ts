@@ -1,3 +1,4 @@
+import { IGameEvent } from "@/types/GameEventTypes";
 import { IGameSchema, IPlayerSchema, ITeamSchema } from "@/types/Types";
 
 export type GameInfo = {
@@ -15,13 +16,7 @@ export default class GameAPI {
     // For now, we'll just use our localStorage setup.
 
     // ----------- Game Fetching -----------
-    const gamesString = localStorage.getItem("games");
-
-    if (!gamesString) return null;
-
-    const games: IGameSchema[] = JSON.parse(gamesString);
-
-    const game = games.find((game) => game.id === gameID);
+    const { game } = await GameAPI.GetGame(gameID);
 
     if (!game) return null;
 
@@ -55,5 +50,42 @@ export default class GameAPI {
     if (!Object.keys(playersMap).length) return null;
 
     return { game, teams, playersMap };
+  }
+
+  static async CreateGameEvent(
+    gameID: string,
+    event: IGameEvent
+  ): Promise<IGameSchema | null> {
+    // ----------- Game Fetching -----------
+    const { game, games } = await this.GetGame(gameID);
+
+    if (!games || !game) return null;
+
+    // ----------- Add the game event ------
+    game.GameEvents.push(event);
+
+    // ----------- Update the game event ---
+    games.map((g) => (g.id === gameID ? game : g));
+
+    console.log("Updated games", games);
+
+    localStorage.setItem("games", JSON.stringify(games));
+
+    return game;
+  }
+
+  // ----------- Game Fetching -----------
+  static async GetGame(
+    gameID: string
+  ): Promise<{ game: IGameSchema | null; games: IGameSchema[] | null }> {
+    const gamesString = localStorage.getItem("games");
+
+    if (!gamesString) return { games: null, game: null };
+
+    const games: IGameSchema[] = JSON.parse(gamesString);
+
+    const game = games.find((game) => game.id === gameID);
+
+    return { games, game: game || null };
   }
 }

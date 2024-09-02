@@ -2,12 +2,12 @@ import { useMemo, useState } from "react";
 import AppInput from "../AppInput";
 import AppModal, { ModalProps } from "../AppModal";
 import { Option, SelectPicker } from "../ui/selectpicker";
-import { IPlayerSchema, ITeamPayloadSchema, ITeamSchema } from "@/Types";
 import useItems from "@/utils/useItems";
 import { Button } from "../ui/button";
 import useCreateItem from "@/utils/useCreateItem";
 import UpsertPlayerModal from "./UpsertPlayerModal";
 import { X } from "lucide-react";
+import { IPlayerSchema, ITeamPayloadSchema, ITeamSchema } from "@/types/Types";
 
 interface Props extends ModalProps {}
 

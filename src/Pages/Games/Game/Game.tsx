@@ -27,8 +27,6 @@ export default function Game() {
   // Saved game info from the Database
   const { game, teams, playersMap } = useGameInfo(id);
 
-  console.log(game);
-
   // TODO: Move these to a useReducer
   const [selectedTeamID, setSelectedTeamID] = useState<string | null>(null);
   const [leftTeamID, setLeftTeamID] = useState<string | null>(null);

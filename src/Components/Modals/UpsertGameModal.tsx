@@ -3,11 +3,12 @@ import AppInput from "../AppInput";
 import AppModal, { ModalProps } from "../AppModal";
 import { Button } from "../ui/button";
 import { SelectPicker } from "../ui/selectpicker";
-import { IGamePayloadSchema, IGameSchema, ITeamSchema } from "@/Types";
+
 import useItems from "@/utils/useItems";
 import useTrackingRef from "@/utils/useTrackingRef";
 import dayjs from "dayjs";
 import useCreateItem from "@/utils/useCreateItem";
+import { IGamePayloadSchema, IGameSchema, ITeamSchema } from "@/types/Types";
 
 interface Props extends ModalProps {}
 

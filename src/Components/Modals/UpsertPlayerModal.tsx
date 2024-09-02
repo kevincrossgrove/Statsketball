@@ -3,7 +3,7 @@ import AppInput from "../AppInput";
 import AppModal, { ModalProps } from "../AppModal";
 import { Button } from "../ui/button";
 import useCreateItem from "@/utils/useCreateItem";
-import { IPlayerPayloadSchema, IPlayerSchema } from "@/Types";
+import { IPlayerPayloadSchema, IPlayerSchema } from "@/types/Types";
 
 interface Props extends ModalProps {
   overlay?: boolean;

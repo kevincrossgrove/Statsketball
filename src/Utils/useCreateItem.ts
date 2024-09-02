@@ -2,7 +2,7 @@ import {
   DataSourcePayloadSchema,
   DataSources,
   DataSourceSchema,
-} from "@/Types";
+} from "@/types/Types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import RecordAPI from "./RecordAPI";
