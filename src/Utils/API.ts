@@ -11,7 +11,7 @@ export default class API {
   }: {
     method: RequestInit["method"];
     url: string;
-    data?: {} | null;
+    data?: Record<string, any> | null;
     token?: string | null;
     throwError?: boolean;
     tags?: string[];
