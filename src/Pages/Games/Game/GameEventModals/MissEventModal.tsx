@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useCreateGameEvent from "../hooks/useCreateGameEvent";
 
 interface Props extends ModalProps {
+  gameID: string;
   teams: ITeamSchema[];
   defaultTeamID?: string | null;
   defaultPoints?: "2" | "3";
@@ -22,6 +23,7 @@ interface Props extends ModalProps {
 export default function MissEventModal({
   open,
   onClose,
+  gameID,
   teams,
   defaultTeamID,
   otherTeamID,
@@ -106,19 +108,19 @@ export default function MissEventModal({
       BlockedBy: playerID,
     };
 
+    // Save Event, show toast
     createEvent({
-      gameID: "",
+      gameID: gameID,
       // @ts-expect-error Needs Zod implemetation, maybe discriminated union?
       event: eventToSave,
-      onSuccess: () => {},
+      onSuccess: () => {
+        toast({
+          title: "Event Saved",
+          description: "Made shot saved successfully",
+          duration: 1750,
+        });
+      },
       onError: (err: string) => console.log(err),
-    });
-
-    // Save Event, show toast
-    toast({
-      title: "Event Saved",
-      description: "Made shot saved successfully",
-      duration: 1750,
     });
 
     handleClose();

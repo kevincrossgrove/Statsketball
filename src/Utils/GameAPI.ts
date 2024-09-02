@@ -56,10 +56,14 @@ export default class GameAPI {
     gameID: string,
     event: IGameEvent
   ): Promise<IGameSchema | null> {
+    console.log("Fetching games");
+
     // ----------- Game Fetching -----------
     const { game, games } = await this.GetGame(gameID);
 
     if (!games || !game) return null;
+
+    if (!game?.GameEvents) game.GameEvents = [];
 
     // ----------- Add the game event ------
     game.GameEvents.push(event);

@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import PlayerSelector from "./PlayerSelector";
 import PointsSelector from "./PointsSelector";
 import { useToast } from "@/components/ui/use-toast";
+import useCreateGameEvent from "../hooks/useCreateGameEvent";
 
 interface Props extends ModalProps {
+  gameID: string;
   teams: ITeamSchema[];
   defaultTeamID?: string | null;
   defaultPoints?: "2" | "3";
@@ -22,6 +24,7 @@ const pageTitles = ["Who made the shot?", "Who assisted the shot?"];
 export default function MadeEventModal({
   open,
   onClose,
+  gameID,
   teams,
   defaultTeamID,
   defaultPoints,
@@ -32,6 +35,7 @@ export default function MadeEventModal({
   const { toast } = useToast();
   const [page, setPage] = useState(0);
   const [selectedPoints, setSelectedPoints] = useState(defaultPoints);
+  const { createEvent, creatingEvent } = useCreateGameEvent();
 
   const selectedTeam = teams.find((team) => team.id === defaultTeamID);
 
@@ -94,10 +98,18 @@ export default function MadeEventModal({
     };
 
     // Save Event, show toast
-    toast({
-      title: "Event Saved",
-      description: "Made shot saved successfully",
-      duration: 1750,
+    createEvent({
+      gameID: gameID,
+      // @ts-expect-error Needs Zod implemetation, maybe discriminated union?
+      event: eventToSave,
+      onSuccess: () => {
+        toast({
+          title: "Event Saved",
+          description: "Made shot saved successfully",
+          duration: 1750,
+        });
+      },
+      onError: (err) => console.log(err),
     });
 
     handleClose();

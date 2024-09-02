@@ -8,6 +8,7 @@ import { ClickLocation, IGameEvent } from "@/types/GameEventTypes";
 import MadeEventModal from "./GameEventModals/MadeEventModal";
 import useGameInfo from "./useGameInfo";
 import MissEventModal from "./GameEventModals/MissEventModal";
+import GameEventFeed from "./GameEventFeed/GameEventFeed";
 
 // The X and Y coordinates of the left hoop
 const leftHoopX = 0.08;
@@ -85,10 +86,13 @@ export default function Game() {
     };
   }, []);
 
+  if (!id) return null;
+
   return (
     <>
       <div className="w-screen h-screen overflow-hidden bg-primary relative">
         <div className="relative w-full h-full">
+          {!clickNeeded && <GameEventFeed game={game} loading={false} />}
           {clickNeeded && (
             <img
               className={twMerge(
@@ -169,9 +173,9 @@ export default function Game() {
         </div>
       </div>
       <MadeEventModal
-        key={teams?.[0]?.id}
         open={newEvent?.Type === "Make" && !!newEvent?.ClickLocation}
         onClose={() => setNewEvent(null)}
+        gameID={id}
         teams={teams || []}
         defaultTeamID={selectedTeamID}
         playersMap={playersMap || {}}
@@ -182,6 +186,7 @@ export default function Game() {
       <MissEventModal
         open={newEvent?.Type === "Miss" && !!newEvent?.ClickLocation}
         onClose={() => setNewEvent(null)}
+        gameID={id}
         teams={teams || []}
         defaultTeamID={selectedTeamID}
         otherTeamID={otherTeamID}
