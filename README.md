@@ -10,9 +10,9 @@
 
 ### In Progress
 
-- Saving game events
-- Ability to switch sides of the court (swap teams / hoops)
 - MissEventModal Implementation ✅
+- Saving game events ✅
 - Toast Event for successful game event creation(s) ✅
-- Game Event Feed (no animations yet)
+- Game Event Feed (no animations yet) ✅
+- Ability to switch sides of the court (swap teams / hoops)
 - Ability to select team colors, potentially even home/away colors

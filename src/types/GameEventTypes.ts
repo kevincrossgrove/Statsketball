@@ -16,7 +16,7 @@ export const BaseGameEventSchema = z.object({
 });
 
 // Made Shot Event
-const MakeEventSchema = z.object({
+const MakeEventSchema = BaseGameEventSchema.extend({
   Type: z.literal("Make"),
   PlayerID: z.string(),
   AssistedBy: z.string().optional(),
@@ -24,15 +24,19 @@ const MakeEventSchema = z.object({
 });
 
 // Missed Shot Event
-const MissEventSchema = z.object({
+const MissEventSchema = BaseGameEventSchema.extend({
   Type: z.literal("Miss"),
   PlayerID: z.string(),
   Points: z.enum(["2", "3"]),
   BlockedBy: z.string().optional(),
 });
 
-type IBaseGameEvent = z.infer<typeof BaseGameEventSchema>;
-type IMakeEvent = z.infer<typeof MakeEventSchema>;
-type IMissEvent = z.infer<typeof MissEventSchema>;
+export type IMakeEvent = z.infer<typeof MakeEventSchema>;
+export type IMissEvent = z.infer<typeof MissEventSchema>;
 
-export type IGameEvent = IBaseGameEvent & (IMakeEvent | IMissEvent);
+export const GameEventSchema = z.discriminatedUnion("Type", [
+  MakeEventSchema,
+  MissEventSchema,
+]);
+
+export type IGameEvent = z.infer<typeof GameEventSchema>;

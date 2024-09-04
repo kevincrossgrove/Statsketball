@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BaseGameEventSchema } from "./GameEventTypes";
+import { BaseGameEventSchema, GameEventSchema } from "./GameEventTypes";
 
 const IdSchema = z.object({
   id: z.string(),
@@ -34,7 +34,7 @@ export const GamePayloadSchema = z.object({
 });
 
 export const GameSchema = GamePayloadSchema.merge(IdSchema).extend({
-  GameEvents: z.array(BaseGameEventSchema),
+  GameEvents: z.array(GameEventSchema),
 });
 
 export const DataSourcesPayloadSchemaMap = {

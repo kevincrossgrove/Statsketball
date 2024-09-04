@@ -56,8 +56,6 @@ export default class GameAPI {
     gameID: string,
     event: IGameEvent
   ): Promise<IGameSchema | null> {
-    console.log("Fetching games");
-
     // ----------- Game Fetching -----------
     const { game, games } = await this.GetGame(gameID);
 
@@ -70,8 +68,6 @@ export default class GameAPI {
 
     // ----------- Update the game event ---
     games.map((g) => (g.id === gameID ? game : g));
-
-    console.log("Updated games", games);
 
     localStorage.setItem("games", JSON.stringify(games));
 

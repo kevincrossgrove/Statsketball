@@ -1,6 +1,6 @@
 import { IGameEvent } from "@/types/GameEventTypes";
-import GameAPI from "@/utils/GameAPI";
-import { useMutation } from "@tanstack/react-query";
+import GameAPI, { GameInfo } from "@/utils/GameAPI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   gameID: string;
@@ -10,12 +10,26 @@ interface Props {
 }
 
 export default function useCreateGameEvent() {
+  const client = useQueryClient();
+
   const createGameEvent = useMutation({
     mutationFn: ({ gameID, event }: Props) => {
       return GameAPI.CreateGameEvent(gameID, event);
     },
-    onSuccess: () => {},
-    onError: () => {},
+    onSuccess: (updatedGame, { gameID, onSuccess }) => {
+      if (!updatedGame) return;
+
+      client.setQueryData<GameInfo>(["game", gameID], (prev) => {
+        if (!prev) return prev;
+
+        return { ...prev, game: updatedGame };
+      });
+
+      onSuccess();
+    },
+    onError: (_, { onError }) => {
+      onError("Error saving made shot");
+    },
   });
 
   return {

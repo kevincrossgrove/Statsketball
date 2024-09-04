@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function useGameInfo(gameID?: string) {
   const gameInfo = useQuery<GameInfo | null>({
-    queryKey: ["game"],
+    queryKey: ["game", gameID],
     queryFn: () => {
       if (!gameID) return null;
 

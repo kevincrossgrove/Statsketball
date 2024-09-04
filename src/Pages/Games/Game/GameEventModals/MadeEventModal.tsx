@@ -1,11 +1,12 @@
 import AppModal, { ModalProps } from "@/components/AppModal";
-import { IGameEvent } from "@/types/GameEventTypes";
+import { GameEventSchema, IGameEvent } from "@/types/GameEventTypes";
 import { IPlayerSchema, ITeamSchema } from "@/types/Types";
 import { useEffect, useState } from "react";
 import PlayerSelector from "./PlayerSelector";
 import PointsSelector from "./PointsSelector";
 import { useToast } from "@/components/ui/use-toast";
 import useCreateGameEvent from "../hooks/useCreateGameEvent";
+import { AppError } from "@/utils/GeneralUtils";
 
 interface Props extends ModalProps {
   gameID: string;
@@ -97,19 +98,36 @@ export default function MadeEventModal({
       AssistedBy: playerID,
     };
 
+    let validatedEvent: IGameEvent | null = null;
+
+    try {
+      validatedEvent = GameEventSchema.parse(eventToSave);
+    } catch (err) {
+      return AppError("Invalid make event in MadeEventModal");
+    }
+
+    if (!validatedEvent) {
+      return AppError("Invalid make event in MadeEventModal");
+    }
+
     // Save Event, show toast
     createEvent({
       gameID: gameID,
-      // @ts-expect-error Needs Zod implemetation, maybe discriminated union?
-      event: eventToSave,
+      event: validatedEvent,
       onSuccess: () => {
         toast({
           title: "Event Saved",
           description: "Made shot saved successfully",
-          duration: 1750,
+          duration: 2000,
         });
       },
-      onError: (err) => console.log(err),
+      onError: (err) => {
+        toast({
+          title: "Error",
+          description: "Error saving made shot",
+          duration: 3000,
+        });
+      },
     });
 
     handleClose();

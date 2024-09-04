@@ -92,7 +92,13 @@ export default function Game() {
     <>
       <div className="w-screen h-screen overflow-hidden bg-primary relative">
         <div className="relative w-full h-full">
-          {!clickNeeded && <GameEventFeed game={game} loading={false} />}
+          {!clickNeeded && (
+            <GameEventFeed
+              game={game}
+              loading={false}
+              playersMap={playersMap}
+            />
+          )}
           {clickNeeded && (
             <img
               className={twMerge(
