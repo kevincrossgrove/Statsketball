@@ -7,6 +7,7 @@ type BaseProps = {
   placeholder: string;
   required: boolean;
   className?: string;
+  id?: string;
 };
 
 type NumberProps = {
@@ -44,12 +45,14 @@ export default function AppInput({
   className,
   value,
   onChange,
+  id,
 }: Props) {
   if (type === "LongText") {
     onChange;
 
     return (
       <Textarea
+        id={id}
         placeholder={placeholder}
         required={required}
         className={twMerge(baseCSS, className)}
@@ -60,12 +63,13 @@ export default function AppInput({
   }
 
   if (type === "Date") {
-    return <DatePicker value={value} onChange={onChange} />;
+    return <DatePicker id={id} value={value} onChange={onChange} />;
   }
 
   if (type === "Text") {
     return (
       <Input
+        id={id}
         type={type === "Text" ? "text" : "number"}
         placeholder={placeholder}
         required={required}

@@ -8,6 +8,8 @@ import useCreateItem from "@/utils/useCreateItem";
 import UpsertPlayerModal from "./UpsertPlayerModal";
 import { X } from "lucide-react";
 import { IPlayerSchema, ITeamPayloadSchema, ITeamSchema } from "@/types/Types";
+import AppColorPicker from "../AppColorPicker";
+import AppButton from "../AppButton";
 
 interface Props extends ModalProps {}
 
@@ -16,6 +18,7 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
   const [location, setLocation] = useState("");
   const [teamPlayers, setTeamPlayers] = useState<string[]>([]);
   const [createPlayerModal, setCreatePlayerModal] = useState(false);
+  const [colors, setColors] = useState(new Array(3).fill(""));
 
   const { items: players, loading: playersLoading } = useItems<IPlayerSchema>({
     dataSource: "players",
@@ -58,24 +61,59 @@ export default function UpsertTeamModal({ open, onClose }: Props) {
           onSubmit={handleSubmit}
           className="text-sm flex flex-col gap-1 pt-4"
         >
-          <label>Team Name</label>
+          <label htmlFor="TeamName">Team Name</label>
           <AppInput
+            id="TeamName"
             type="Text"
             placeholder="Team Name"
             required={true}
             value={teamName}
             onChange={setTeamName}
           />
-          <label>Location</label>
+          <label htmlFor="Location">Location</label>
           <AppInput
+            id="Location"
             type="Text"
             placeholder="Location"
             required={false}
             value={location}
             onChange={setLocation}
           />
-          <label>Players</label>
+          <label htmlFor="Colors">Team Colors (Up to 3)</label>
+          <div className="flex gap-2">
+            <AppColorPicker
+              initialColor={colors[0]}
+              onChange={(newColor) => {
+                setColors((prev) => [newColor, prev[1], prev[2]]);
+              }}
+            />
+            <AppColorPicker
+              initialColor={colors[1]}
+              onChange={(newColor) => {
+                setColors((prev) => [prev[0], newColor, prev[2]]);
+              }}
+            />
+            <AppColorPicker
+              initialColor={colors[2]}
+              onChange={(newColor) => {
+                setColors((prev) => [prev[0], prev[1], newColor]);
+              }}
+            />
+          </div>
+          <AppButton
+            color="danger"
+            type="button"
+            outline
+            className="w-fit mb-3 mt-1"
+            onClick={() => {
+              setColors(new Array(3).fill(""));
+            }}
+          >
+            Clear Colors
+          </AppButton>
+          <label htmlFor="Players">Players</label>
           <SelectPicker
+            id="Players"
             placeholder="Select at least 5 players"
             required={true}
             options={playerOptions}

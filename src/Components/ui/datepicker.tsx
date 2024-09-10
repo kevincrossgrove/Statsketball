@@ -14,13 +14,15 @@ import {
 interface Props {
   value?: Date;
   onChange?: (value: Date | undefined) => void;
+  id?: string;
 }
 
-export function DatePicker({ value, onChange }: Props) {
+export function DatePicker({ value, onChange, id }: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant={"outline"}
           type="button"
           onClick={(e) => e.stopPropagation()}

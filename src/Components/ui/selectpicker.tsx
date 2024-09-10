@@ -39,6 +39,7 @@ interface Props {
   label?: string;
   onCreate?: () => void;
   multiple?: boolean;
+  id?: string;
 }
 
 export function SelectPicker({
@@ -51,6 +52,7 @@ export function SelectPicker({
   label,
   onCreate,
   multiple,
+  id,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -59,6 +61,7 @@ export function SelectPicker({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            id={id}
             variant="outline"
             role="combobox"
             aria-expanded={open}
